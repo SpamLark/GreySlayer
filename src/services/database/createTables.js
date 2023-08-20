@@ -78,7 +78,7 @@ const createTables = async (db) => {
   await createTable(db, 'models', SQL.CREATE_MODELS_SQL);
   await createTable(db, 'recipes', SQL.CREATE_RECIPES_SQL);
   await createTable(db, 'steps', SQL.CREATE_STEPS_SQL);
-  insertData(db);
+  await insertData(db);
 };
 
 export default createTables;

@@ -1,23 +1,26 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import * as SQLite from 'expo-sqlite'
-import createTables from './src/database/createTables';
+import Tracker from './src/screens/Tracker';
+import Shame from './src/screens/Shame';
+import PaintLog from './src/screens/PaintLog';
+import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { DatabaseProvider } from './src/services/database/DatabaseContext';
 
-
-const db = SQLite.openDatabase('greyslayer.db');
-
-db.exec([{ sql: 'PRAGMA foreign_keys = ON;', args: [] }], false, () =>
-  console.log('Foreign keys turned on')
-);
-
-createTables(db);
+const Tab = createBottomTabNavigator();
 
 export default function App() {
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <DatabaseProvider>
+      <NavigationContainer styles={styles.container}>
+        <Tab.Navigator>
+          <Tab.Screen name="Shame" component={Shame} />
+          <Tab.Screen name="Tracker" component={Tracker} />
+          <Tab.Screen name="Log" component={PaintLog} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </DatabaseProvider>
   );
 }
 
