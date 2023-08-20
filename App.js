@@ -1,5 +1,16 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
+import * as SQLite from 'expo-sqlite'
+import createTables from './src/database/createTables';
+
+
+const db = SQLite.openDatabase('greyslayer.db');
+
+db.exec([{ sql: 'PRAGMA foreign_keys = ON;', args: [] }], false, () =>
+  console.log('Foreign keys turned on')
+);
+
+createTables(db);
 
 export default function App() {
   return (
