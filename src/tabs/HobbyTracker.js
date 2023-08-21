@@ -82,7 +82,11 @@ const Tracker = () => {
     checkIns.forEach((checkIn) => {
       newMarkedDates[checkIn.check_in_date] = {selected: true, marked: true, selectedColor: 'red'};
     });
-    setMarkedDates(newMarkedDates)
+    setMarkedDates(newMarkedDates);
+    const alreadyCheckedInToday = checkIns.some(checkIn => checkIn.check_in_date === today);
+    if (alreadyCheckedInToday) {
+      setCheckedInToday(true);
+    }
   }, [checkIns]);
 
   return (
@@ -100,7 +104,7 @@ const Tracker = () => {
                 try {
                   await insertCheckIn(db, today);
                   setCheckIns(await getAllCheckIns(db));
-                  setCheckedInToday(true);
+                  //setCheckedInToday(true);
                 } catch (error) {
                   console.log(error);
                 }
