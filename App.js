@@ -6,8 +6,19 @@ import PaintLog from './src/screens/PaintLog';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { DatabaseProvider } from './src/services/database/DatabaseContext';
+import createTables from './src/services/database/createTables';
+import * as SQLite from 'expo-sqlite';
 
 const Tab = createBottomTabNavigator();
+
+// Open database
+const db = SQLite.openDatabase('greyslayer.db');
+// Ensure foreign keys are enabled
+db.exec([{ sql: 'PRAGMA foreign_keys = ON;', args: [] }], false, () =>
+    console.log('Foreign keys turned on')
+);
+
+createTables(db);
 
 export default function App() {
 
