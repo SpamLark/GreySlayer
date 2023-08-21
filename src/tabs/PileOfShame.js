@@ -2,6 +2,7 @@ import {View, Text, Image, ScrollView, TextInput, StyleSheet, LogBox} from 'reac
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import PileOverview from './pileOfShameScreens/PileOverview';
 import PileAddEntryForm from './pileOfShameScreens/PileAddEntryForm';
+import PileViewEntry from './pileOfShameScreens/PileViewEntry';
 
 const Stack = createNativeStackNavigator();
 
@@ -18,6 +19,11 @@ const Shame = () => {
             component={PileAddEntryForm}
             options={{title:'Add Pile Entry'}}
           />
+          <Stack.Screen
+            name="View Entry"
+            component={PileViewEntry}
+            options={{title:'View Pile Entry'}}
+          />
         </Stack.Navigator>
     );
   };
@@ -29,7 +35,7 @@ const Shame = () => {
       alignItems: 'center',
       justifyContent: 'center',
       marginTop: 0
-    },
+    }
   });
 
   export default Shame;

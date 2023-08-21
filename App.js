@@ -31,6 +31,7 @@ export default function App() {
           <Tab.Screen name="Log" component={PaintLog} />
         </Tab.Navigator>
       </NavigationContainer>
+      <StatusBar style="auto" />
     </DatabaseProvider>
   );
 }
