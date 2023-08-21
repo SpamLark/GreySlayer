@@ -3,17 +3,9 @@ const getAllCurrentPileOfShameEntries = async (db) => {
     return new Promise((resolve, reject) => {
         db.transaction((tx) => {
             tx.executeSql(
-                `SELECT 
-                    kit_id,
-                    kit_name,
-                    num_models,
-                    kit_value,
-                    status_id
-                FROM
-                    model_kits
-                WHERE
-                    status_id = 1
-                `,
+                `SELECT kit_id, kit_name, num_models, kit_value, status_id
+                FROM model_kits
+                WHERE status_id = 1`,
                 [],
                 (_, { rows }) => {
                 const items = rows._array;
@@ -67,7 +59,11 @@ const insertNewPileOfShameEntry = async (db, kitName, numModels, kitValue) => {
     })
 }
 
-// Update the status for pile of shame entry
+/* 
+Update the status for pile of shame entry 
+n.b. no helper functions here as parameters are passed directly from the UI based on data pulled from the database
+Expectation is that kitId and statusId are valid at the point the function is called.
+*/
 const updatePileOfShameEntryStatus = async (db, kitId, statusId) => {
     return new Promise((resolve, reject) => {
         db.transaction((tx) => {
