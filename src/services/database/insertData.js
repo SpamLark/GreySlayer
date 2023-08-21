@@ -23,7 +23,6 @@ const insertStatusLookupData = async (db) => {
         tx.executeSql(`INSERT INTO status_lookup (status_id, status_description) VALUES (1, 'Pile of Shame');`);
         tx.executeSql(`INSERT INTO status_lookup (status_id, status_description) VALUES (2, 'Completed');`);
         tx.executeSql(`INSERT INTO status_lookup (status_id, status_description) VALUES (3, 'Sold');`);
-        tx.executeSql(`INSERT INTO status_lookup (status_id, status_description) VALUES (4, 'Donated');`);
     }, error => {
         console.log('error inserting status_lookup data:', error);
     }, () => {
@@ -42,7 +41,7 @@ const insertModelKitData = async (db) => {
         tx.executeSql(`INSERT INTO model_kits (kit_name, num_models, kit_value, status_id) VALUES ('Cadian Command Squad', 5, 30, 1);`);
         tx.executeSql(`INSERT INTO model_kits (kit_name, num_models, kit_value, status_id) VALUES ('Sentinel', 1, 25, 1);`);
         tx.executeSql(`INSERT INTO model_kits (kit_name, num_models, kit_value, status_id) VALUES ('Alariel', 1, 75, 2);`);
-        tx.executeSql(`INSERT INTO model_kits (kit_name, num_models, kit_value, status_id) VALUES ('Land Raider', 1, 50, 4);`);
+        tx.executeSql(`INSERT INTO model_kits (kit_name, num_models, kit_value, status_id) VALUES ('Land Raider', 1, 50, 1);`);
     }, error => {
         console.log('error inserting model_kit data:', error);
     }, () => {

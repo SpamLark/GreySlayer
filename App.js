@@ -1,8 +1,8 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Tracker from './src/screens/Tracker';
-import Shame from './src/screens/Shame';
-import PaintLog from './src/screens/PaintLog';
+import Tracker from './src/tabs/HobbyTracker';
+import Shame from './src/tabs/PileOfShame';
+import PaintLog from './src/tabs/PaintLog';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { DatabaseProvider } from './src/services/database/DatabaseContext';
@@ -26,7 +26,7 @@ export default function App() {
     <DatabaseProvider>
       <NavigationContainer styles={styles.container}>
         <Tab.Navigator>
-          <Tab.Screen name="Shame" component={Shame} />
+          <Tab.Screen name="Pile of Shame" component={Shame} />
           <Tab.Screen name="Tracker" component={Tracker} />
           <Tab.Screen name="Log" component={PaintLog} />
         </Tab.Navigator>

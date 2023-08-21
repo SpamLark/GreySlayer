@@ -1,10 +1,10 @@
 import {View, Text, StyleSheet, TouchableOpacity, Animated, Alert} from 'react-native';
 import React, { useState, useEffect, useCallback } from 'react';
-import { getAllCheckIns } from '../services/database';
+import { getAllCheckIns } from '../services/checkInServices';
 import { useDatabase } from '../services/database/DatabaseContext';
 //import CalendarListScreen from '../components/CalendarListSceen';
 import { CalendarList } from 'react-native-calendars';
-import { insertCheckIn, deleteCheckIn, todaysDate } from '../services/database';
+import { insertCheckIn, deleteCheckIn, todaysDate } from '../services/checkInServices';
 
 const Tracker = () => {
 
