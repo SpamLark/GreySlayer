@@ -6,6 +6,8 @@ import { useDatabase } from '../../services/database/DatabaseContext';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { getAllRecipeSteps, updateStepNumbers } from '../../services/paintLogServices';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import SwipeableItem from 'react-native-swipeable-item';
+import UnderlayLeft from '../../components/UnderlayLeft';
 
 
 const Steps = ({route}) => {
@@ -33,17 +35,25 @@ const Steps = ({route}) => {
           }
           return (
             <ScaleDecorator>
-              <TouchableOpacity 
-                onPress={handlePress}
-                onLongPress={drag}
-                disabled={isActive}
+              <SwipeableItem
+                onChange={(state) => {
+                  console.log(state);
+                }}
+                renderUnderlayLeft={() => <UnderlayLeft />}
+                snapPointsLeft={[150]}
               >
-                <View style={styles.horizontalListContainer}>
-                  <View>
-                    <Text>{item.step_description} - {item.paint_name}</Text>
+                <TouchableOpacity 
+                  onPress={handlePress}
+                  onLongPress={drag}
+                  disabled={isActive}
+                >
+                  <View style={styles.horizontalListContainer}>
+                    <View>
+                      <Text>{item.step_description} - {item.paint_name}</Text>
+                    </View>
                   </View>
-                </View>
-              </TouchableOpacity>
+                </TouchableOpacity>
+              </SwipeableItem>
             </ScaleDecorator>
           );
       };
@@ -67,6 +77,9 @@ const Steps = ({route}) => {
         }
     };
 
+    // Delete step function called by swipe actions
+
+
     // On focus, retrieve current data from the projects table
     useEffect(() => {
         if (isFocused) {
@@ -80,10 +93,10 @@ const Steps = ({route}) => {
             <GestureHandlerRootView>
                 <DraggableFlatList 
                     data={steps}
-                    //onDragEnd={({data}) => {setSteps(data); console.log(steps); console.log(data)}}
                     onDragEnd={({data}) => updateStepOrder(data)}
                     keyExtractor={(item) => item.step_id}
                     renderItem={renderItem}
+                    activationDistance={20}
                     //estimatedItemSize={200} -- only usable on FlashList
                 />
             </GestureHandlerRootView>
@@ -91,7 +104,7 @@ const Steps = ({route}) => {
           <View style={styles.buttonContainer}>
             <TouchableOpacity 
               style={styles.button}
-              //onPress={()=> navigation.navigate('Add Entry')}
+              onPress={()=> navigation.navigate('Add Step', recipeId)}
             >
               <Text style={styles.buttonText}>Add Step</Text>
             </TouchableOpacity>
@@ -141,7 +154,12 @@ const styles = StyleSheet.create({
     buttonText: {
       color: '#fff',
       fontSize: 16,
-    }
+    },
+    underlayLeft: {
+      flex: 1,
+      backgroundColor: 'tomato',
+      justifyContent: 'flex-end',
+    },
   });
 
 export default Steps;
