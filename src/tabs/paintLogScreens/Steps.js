@@ -11,7 +11,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 const Steps = ({route}) => {
 
     // Extract the details of the project sent via the route prop
-    const item = route.params.item;
+    const recipeId = route.params;
     
     // Declare is focused to hold focus state of the screen
     const isFocused = useIsFocused();
@@ -29,7 +29,7 @@ const Steps = ({route}) => {
     const renderItem = ({item, drag, isActive}) => { 
         const handlePress = () => {
               console.log('Item pressed:', item);
-              navigation.navigate('Steps', {item});
+              //navigation.navigate('Steps', {item});
           }
           return (
             <ScaleDecorator>
@@ -61,7 +61,7 @@ const Steps = ({route}) => {
     // Get steps from the database for the recipe using recipe_id from route prop
     const getSteps = async () => {
         try {
-        setSteps(await getAllRecipeSteps(db, item.recipe_id));
+        setSteps(await getAllRecipeSteps(db, recipeId));
         } catch (error) {
         console.log('Error retrieving steps:', error);
         }

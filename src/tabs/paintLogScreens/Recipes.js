@@ -8,8 +8,8 @@ import { getAllModelRecipes } from '../../services/paintLogServices';
 
 const Recipes = ({route}) => {
 
-    // Extract the details of the project sent via the route prop
-    const item = route.params.item;
+    // Extract the model id from the route parameters
+    const modelId = route.params;
     
     // Declare is focused to hold focus state of the screen
     const isFocused = useIsFocused();
@@ -27,7 +27,7 @@ const Recipes = ({route}) => {
     const renderItem = ({item}) => { 
         const handlePress = () => {
               console.log('Item pressed:', item);
-              navigation.navigate('Steps', {item});
+              navigation.navigate('Steps', item.recipe_id);
           }
           return (
               <TouchableOpacity onPress={handlePress}>
@@ -43,7 +43,7 @@ const Recipes = ({route}) => {
     // Get recipes from the database for the model using model_id from route prop
     const getRecipes = async () => {
         try {
-        setRecipes(await getAllModelRecipes(db, item.model_id));
+        setRecipes(await getAllModelRecipes(db, modelId));
         } catch (error) {
         console.log('Error retrieving recipes:', error);
         }
@@ -68,7 +68,7 @@ const Recipes = ({route}) => {
           <View style={styles.buttonContainer}>
             <TouchableOpacity 
               style={styles.button}
-              //onPress={()=> navigation.navigate('Add Entry')}
+              onPress={()=> navigation.navigate('Add Recipe', modelId)}
             >
               <Text style={styles.buttonText}>Add Recipe</Text>
             </TouchableOpacity>

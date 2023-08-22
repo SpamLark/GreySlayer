@@ -6,6 +6,7 @@ import Recipes from './paintLogScreens/Recipes';
 import Steps from './paintLogScreens/Steps';
 import ProjectAddEntryForm from './paintLogScreens/ProjectAddEntryForm';
 import ModelAddEntryForm from './paintLogScreens/ModelAddEntryForm';
+import RecipeAddEntryForm from './paintLogScreens/RecipeAddEntryForm';
 
 const Stack = createNativeStackNavigator();
 
@@ -36,6 +37,11 @@ const PaintLog = () => {
         name="Recipes"
         component={Recipes}
         options={{title:'Recipes'}}
+      />
+      <Stack.Screen
+        name="Add Recipe"
+        component={RecipeAddEntryForm}
+        options={{title:'Add New Recipe'}}
       />
       <Stack.Screen
         name="Steps"

@@ -27,7 +27,7 @@ const Models = ({route}) => {
     const renderItem = ({item}) => { 
         const handlePress = () => {
               console.log('Item pressed:', item);
-              navigation.navigate('Recipes', {item});
+              navigation.navigate('Recipes', item.model_id);
           }
           return (
               <TouchableOpacity onPress={handlePress}>

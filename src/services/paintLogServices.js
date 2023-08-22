@@ -132,6 +132,48 @@ const insertNewModel = async (db, modelName, projectId) => {
     });
 };
 
+// Insert new recipe
+const insertNewRecipe = async (db, recipeName, modelId) => {
+    return new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+            tx.executeSql(
+                `INSERT INTO recipes (recipe_name, model_id)
+                    VALUES (?, ?)`,
+                [recipeName, modelId],
+                (_, result) => {
+                    console.log('Row inserted to recipes successfully.');
+                    resolve(result);
+                },
+                (_, error) => {
+                    console.log('Error inserting row into recipes:', error);
+                    reject(error);
+                }
+            );
+        });
+    });
+};
+
+// Insert new step
+const insertNewStep = async (db, stepDescription, paintName, paintBrand, recipeId) => {
+    return new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+            tx.executeSql(
+                `INSERT INTO steps (step_description, paint_name, paint_brand, recipe_id, step_number)
+                VALUES (?, ?, ?, ?, (SELECT MAX(s2.step_number) + 1 FROM steps s2 WHERE recipe_id = s2.recipe_id));`,
+                [stepDescription, paintName, paintBrand, recipeId],
+                (_, result) => {
+                    console.log('Row inserted to steps successfully.');
+                    resolve(result);
+                },
+                (_, error) => {
+                    console.log('Error inserting row into steps:', error);
+                    reject(error);
+                }
+            );
+        });
+    });
+};
+
 // Update step numbers for an array of steps
 const updateStepNumbers = async (db, stepArray) => {
     return new Promise((resolve, reject) => {
@@ -166,5 +208,5 @@ const updateStepNumbers = async (db, stepArray) => {
 export { 
     getAllProjects, getAllProjectModels, getAllModelRecipes, 
     getAllRecipeSteps, updateStepNumbers, insertNewProject, 
-    insertNewModel
+    insertNewModel, insertNewRecipe, insertNewStep
 }
