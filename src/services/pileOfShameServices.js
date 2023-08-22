@@ -21,6 +21,28 @@ const getAllCurrentPileOfShameEntries = async (db) => {
     });
 };
 
+// Return total pile of shame value
+const getTotalPileValue = async (db) => {
+    return new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+            tx.executeSql(
+                `SELECT SUM(kit_value) pile_value FROM model_kits GROUP BY status_id HAVING status_id = 1;`,
+                [],
+                (_, { rows }) => {
+                const items = rows._array;
+                resolve(items);
+                },
+                (_, error) => {
+                console.log('Error:', error);
+                // Reject promise
+                reject(error);
+                }
+            );
+        });
+    });
+};
+
+
 // Validate modelKit data before database insertion
 const validateKitValue = (kitValue) => {
     //Check kitValue is in expected format
@@ -83,4 +105,7 @@ const updatePileOfShameEntryStatus = async (db, kitId, statusId) => {
     })
 }
 
-export { getAllCurrentPileOfShameEntries, insertNewPileOfShameEntry, updatePileOfShameEntryStatus }
+export { 
+        getAllCurrentPileOfShameEntries, insertNewPileOfShameEntry, updatePileOfShameEntryStatus,
+        getTotalPileValue 
+}

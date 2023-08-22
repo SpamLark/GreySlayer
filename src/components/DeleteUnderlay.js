@@ -1,17 +1,19 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { useDatabase } from '../services/database/DatabaseContext';
 
-const UnderlayLeft = () => {
-return (
-    <View style={[styles.horizontalListContainer, styles.underlayLeft]}>
-    <TouchableOpacity onPress={() => console.log('DELETE STEP')}>
-        <Text>DELETE</Text>
-    </TouchableOpacity>
-    </View>
-);
+const DeleteUnderlay = ({deleteItem, itemId}) => {
+    // Use shared database connection
+    const db = useDatabase();
+
+    return (
+        <View style={[styles.horizontalListContainer, styles.underlayLeft]}>
+        <TouchableOpacity onPress={() => deleteItem(db, itemId)}>
+            <Text>DELETE</Text>
+        </TouchableOpacity>
+        </View>
+    );
 };
-
-export default UnderlayLeft;
 
 const styles = StyleSheet.create({
 horizontalListContainer: {
@@ -32,3 +34,5 @@ underlayLeft: {
     justifyContent: 'flex-end',
 },
 });
+
+export default DeleteUnderlay;

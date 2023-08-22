@@ -1,15 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, Image, ScrollView, TextInput, StyleSheet, LogBox, TouchableOpacity } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
-import DraggableFlatList, { ScaleDecorator } from "react-native-draggable-flatlist";
-import { useDatabase } from '../../services/database/DatabaseContext';
-import { useNavigation, useIsFocused } from '@react-navigation/native';
-import { getAllRecipeSteps, updateStepNumbers } from '../../services/paintLogServices';
+import React from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import DraggableFlatList from "react-native-draggable-flatlist";
+import { useNavigation } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import SwipeableItem from 'react-native-swipeable-item';
-import UnderlayLeft from '../../components/UnderlayLeft';
 
-const SlayerList = ({data}, {keyExtractor}, {renderItem}, {addForm}, {parentId}, {item}) => {
+const SlayerList = ({data, keyExtractor, renderItem, addForm, parentId, item, updateListOrder}) => {
+
+const navigation = useNavigation();
 
 return (
     <View style={styles.container}>
@@ -17,7 +14,7 @@ return (
         <GestureHandlerRootView>
             <DraggableFlatList 
                 data={data}
-                onDragEnd={({data}) => updateStepOrder(data)}
+                onDragEnd={({data}) => updateListOrder(data)}
                 keyExtractor={keyExtractor}
                 renderItem={renderItem}
                 activationDistance={20}
@@ -27,7 +24,7 @@ return (
       <View style={styles.buttonContainer}>
         <TouchableOpacity 
           style={styles.button}
-          onPress={()=> navigation.navigate({addForm}, {parentId})}
+          onPress={()=> navigation.navigate(addForm, parentId)}
         >
           <Text style={styles.buttonText}>Add {item}</Text>
         </TouchableOpacity>

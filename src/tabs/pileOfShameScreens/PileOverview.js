@@ -4,6 +4,7 @@ import React, { useState, useEffect, useCallback } from 'react';
 import { getAllCurrentPileOfShameEntries } from '../../services/pileOfShameServices';
 import { useDatabase } from '../../services/database/DatabaseContext';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { getTotalPileValue } from '../../services/pileOfShameServices';
 
 
 const PileOverview = () => {
@@ -19,6 +20,9 @@ const PileOverview = () => {
 
   // Declare state variable to hold current pile of shame items
   const [pileItems, setPileItems] = useState();
+
+  //Declare state variable to hold total pile of shame value
+  const [pileValue, setPileValue] = useState(0);
 
   // Used by FlashList of model kits to control display and behaviour
   const renderItem = ({item}) => { 
@@ -49,10 +53,23 @@ const PileOverview = () => {
     }
   };
 
+    // Get pile value
+    const getValue = async () => {
+      try {
+        const valueItem = (await getTotalPileValue(db));
+        console.log(valueItem);
+        setPileValue(valueItem[0].pile_value);
+        console.log(pileValue);
+      } catch (error) {
+        console.log('Error while retrieving pile value:', error)
+      }
+    }
+
   // On focus, retrieve current data from the model_kits table
   useEffect(() => {
     if (isFocused) {
       getCurrentPile();
+      getValue();
     }
   },[isFocused]);
 
@@ -67,6 +84,7 @@ const PileOverview = () => {
           />
         </View>
         <View style={styles.buttonContainer}>
+          <Text>£{pileValue.toFixed(2)}</Text>
           <TouchableOpacity 
             style={styles.button}
             onPress={()=> navigation.navigate('Add Entry')}

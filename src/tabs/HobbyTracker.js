@@ -5,6 +5,8 @@ import { useDatabase } from '../services/database/DatabaseContext';
 //import CalendarListScreen from '../components/CalendarListSceen';
 import { CalendarList } from 'react-native-calendars';
 import { insertCheckIn, deleteCheckIn, todaysDate } from '../services/checkInServices';
+import { useNavigation, useIsFocused } from '@react-navigation/native';
+import { getTotalPileValue } from '../services/pileOfShameServices';
 
 const Tracker = () => {
 
@@ -22,6 +24,9 @@ const Tracker = () => {
 
   // Declare state variable to track whether user has checked in today
   const [checkedInToday, setCheckedInToday] = useState(false);
+
+  // Declare is focused to hold focus state of the screen
+  const isFocused = useIsFocused();
 
   // Show alert dialogue confirming delete
   const showDeleteAlert = (dateString) => {
@@ -65,16 +70,19 @@ const Tracker = () => {
       }
   }, [checkIns]);
 
-  // Retrieve checkIns from database on initial component load
+  // Retrieve checkIns from database on focus
   useEffect(() => {
-    (async () => {
-      try {
-        setCheckIns(await getAllCheckIns(db));
-      } catch (error) {
-        console.log('This is the error', error);
-      }
-    })();
-  }, []);
+    if (isFocused) {
+      console.log('HobbyTracker has focus');
+      (async () => {
+        try {
+          setCheckIns(await getAllCheckIns(db));
+        } catch (error) {
+          console.log('This is the error', error);
+        }
+      })();
+    } if (!isFocused) {console.log('HobbyTrackerr has lost focus');}
+  }, [isFocused]);
 
   // Populate the markedDates object with the dates from checkIns whenever checkIns updates
   useEffect(() => {

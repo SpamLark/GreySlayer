@@ -205,8 +205,30 @@ const updateStepNumbers = async (db, stepArray) => {
     });
 };
 
+// Delete step
+const deleteStep = async (db, stepId) => {
+    console.log(stepId);
+    return new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+            tx.executeSql(
+                `DELETE FROM steps WHERE step_id = ?;`,
+                [stepId],
+                (_, result) => {
+                    console.log('Row deleted from steps successfully.');
+                    console.log(result);
+                    resolve(result);
+                },
+                (_, error) => {
+                    console.log('Error deleting row from steps:', error);
+                    reject(error);
+                }
+            );
+        });
+    });
+};
+
 export { 
     getAllProjects, getAllProjectModels, getAllModelRecipes, 
     getAllRecipeSteps, updateStepNumbers, insertNewProject, 
-    insertNewModel, insertNewRecipe, insertNewStep
+    insertNewModel, insertNewRecipe, insertNewStep, deleteStep
 }
