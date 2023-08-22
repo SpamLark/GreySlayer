@@ -49,12 +49,74 @@ const insertModelKitData = async (db) => {
     });
 }
 
+// Insert dummy projects data
+const insertProjectData = async (db) => {
+    db.transaction(tx => {
+        tx.executeSql(`INSERT INTO projects (project_id, project_name) VALUES (1, 'Soulblight Gravelords');`);
+        tx.executeSql(`INSERT INTO projects (project_id, project_name) VALUES (2, 'Astra Militarum');`);
+        tx.executeSql(`INSERT INTO projects (project_id, project_name) VALUES (3, 'Delaque Gang');`);
+    }, error => {
+        console.log('error inserting projects data:', error);
+    }, () => {
+        console.log('projects data inserted successfully.')
+    });
+}
+
+// Insert dummy models data
+const insertModelsData = async (db) => {
+    db.transaction(tx => {
+        tx.executeSql(`INSERT INTO models (model_id, model_name, project_id) VALUES (1, 'Skeletons', 1);`);
+        tx.executeSql(`INSERT INTO models (model_id, model_name, project_id) VALUES (2, 'Zombies', 1);`);
+        tx.executeSql(`INSERT INTO models (model_id, model_name, project_id) VALUES (3, 'Dire Wolves', 1);`);
+        tx.executeSql(`INSERT INTO models (model_id, model_name, project_id) VALUES (4, 'Zombie Dragon', 1);`);
+        tx.executeSql(`INSERT INTO models (model_id, model_name, project_id) VALUES (5, 'Infantry', 2);`);
+        tx.executeSql(`INSERT INTO models (model_id, model_name, project_id) VALUES (6, 'Tanks', 2);`);
+        tx.executeSql(`INSERT INTO models (model_id, model_name, project_id) VALUES (7, 'Ganger', 3);`);
+    }, error => {
+        console.log('error inserting models data:', error);
+    }, () => {
+        console.log('models data inserted successfully.')
+    });
+}
+
+// Insert dummy recipes data
+const insertRecipesData = async (db) => {
+    db.transaction(tx => {
+        tx.executeSql(`INSERT INTO recipes (recipe_id, recipe_name, model_id) VALUES (1, 'Bone', 1);`);
+        tx.executeSql(`INSERT INTO recipes (recipe_id, recipe_name, model_id) VALUES (2, 'Cloth', 1);`);
+        tx.executeSql(`INSERT INTO recipes (recipe_id, recipe_name, model_id) VALUES (3, 'Metals', 1);`);
+        tx.executeSql(`INSERT INTO recipes (recipe_id, recipe_name, model_id) VALUES (4, 'Base', 1);`);
+    }, error => {
+        console.log('error inserting recipes data:', error);
+    }, () => {
+        console.log('recipes data inserted successfully.')
+    });
+}
+
+// Insert dummy steps data
+const insertStepsData = async (db) => {
+    db.transaction(tx => {
+        tx.executeSql(`INSERT INTO steps (step_id, step_number, step_description, paint_name, paint_brand, recipe_id) VALUES (1, 1, 'Basecoat', 'Zhandri Dust', 'Citadel', 1);`);
+        tx.executeSql(`INSERT INTO steps (step_id, step_number, step_description, paint_name, paint_brand, recipe_id) VALUES (2, 2, 'Wash', 'Agrax Earthshade', 'Citadel', 1);`);
+        tx.executeSql(`INSERT INTO steps (step_id, step_number, step_description, paint_name, paint_brand, recipe_id) VALUES (3, 3, 'Layer', 'Zhandri Dust', 'Citadel', 1);`);
+        tx.executeSql(`INSERT INTO steps (step_id, step_number, step_description, paint_name, paint_brand, recipe_id) VALUES (4, 4, 'Highlight', 'Screaming Skull', 'Citadel', 1);`);
+        tx.executeSql(`INSERT INTO steps (step_id, step_number, step_description, paint_name, paint_brand, recipe_id) VALUES (5, 5, 'Highlight', 'Bright White', 'Vallejo', 1);`);
+    }, error => {
+        console.log('error inserting steps data:', error);
+    }, () => {
+        console.log('steps data inserted successfully.')
+    });
+}
 
 
 const insertData = async (db) => {
     await insertCheckInData(db);
     await insertStatusLookupData(db);
     await insertModelKitData(db);
+    await insertProjectData(db);
+    await insertModelsData(db);
+    await insertRecipesData(db);
+    await insertStepsData(db);
 }
 
 export default insertData;

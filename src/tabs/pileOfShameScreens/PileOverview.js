@@ -6,8 +6,6 @@ import { useDatabase } from '../../services/database/DatabaseContext';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 
 
-
-
 const PileOverview = () => {
 
   // Declare is focused to hold focus state of the screen
@@ -22,13 +20,12 @@ const PileOverview = () => {
   // Declare state variable to hold current pile of shame items
   const [pileItems, setPileItems] = useState();
 
+  // Used by FlashList of model kits to control display and behaviour
   const renderItem = ({item}) => { 
-    
     const handlePress = () => {
           console.log('Item pressed:', item);
           navigation.navigate('View Entry', {item});
       }
-      
       return (
           <TouchableOpacity onPress={handlePress}>
             <View style={styles.horizontalListContainer}>
@@ -124,4 +121,4 @@ const PileOverview = () => {
     }
   });
 
-  export default PileOverview;
+export default PileOverview;
