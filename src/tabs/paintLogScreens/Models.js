@@ -9,7 +9,7 @@ import { getAllProjectModels } from '../../services/paintLogServices';
 const Models = ({route}) => {
 
     // Extract the details of the project sent via the route prop
-    const item = route.params.item;
+    const projectId = route.params;
     
     // Declare is focused to hold focus state of the screen
     const isFocused = useIsFocused();
@@ -23,7 +23,7 @@ const Models = ({route}) => {
     // Declare state variable to hold models
     const [models, setModels] = useState();
 
-    // Used by FlashList of projects to control display and behaviour
+    // Used by FlashList of models to control display and behaviour
     const renderItem = ({item}) => { 
         const handlePress = () => {
               console.log('Item pressed:', item);
@@ -43,7 +43,7 @@ const Models = ({route}) => {
     // Get models from the database for the project using project_id from route prop
     const getModels = async () => {
         try {
-        setModels(await getAllProjectModels(db, item.project_id));
+        setModels(await getAllProjectModels(db, projectId));
         } catch (error) {
         console.log('Error retrieving models:', error);
         }
@@ -68,7 +68,7 @@ const Models = ({route}) => {
           <View style={styles.buttonContainer}>
             <TouchableOpacity 
               style={styles.button}
-              //onPress={()=> navigation.navigate('Add Entry')}
+              onPress={()=> navigation.navigate('Add Model', projectId)}
             >
               <Text style={styles.buttonText}>Add Model</Text>
             </TouchableOpacity>

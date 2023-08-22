@@ -19,7 +19,8 @@ export const CREATE_MODEL_KITS_SQL = `CREATE TABLE model_kits (
 
 export const CREATE_PROJECTS_SQL = `CREATE TABLE projects (
     project_id INTEGER PRIMARY KEY,
-    project_name TEXT NOT NULL
+    project_name TEXT NOT NULL,
+    model_range TEXT
 );`
 
 export const CREATE_MODELS_SQL = `CREATE TABLE models (

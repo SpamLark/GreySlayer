@@ -90,10 +90,53 @@ const getAllRecipeSteps = async (db, recipeId) => {
     });
 };
 
-const updateStepNumbers = async (db, updatedOrder) => {
+// Insert new project
+const insertNewProject = async (db, projectName, modelRange) => {
     return new Promise((resolve, reject) => {
         db.transaction((tx) => {
-            updatedOrder.forEach((item, index) => {
+            tx.executeSql(
+                `INSERT INTO projects (project_name, model_range)
+                    VALUES (?, ?)`,
+                [projectName, modelRange],
+                (_, result) => {
+                    console.log('Row inserted to projects successfully.');
+                    resolve(result);
+                },
+                (_, error) => {
+                    console.log('Error inserting row into projects:', error);
+                    reject(error);
+                }
+            );
+        });
+    });
+};
+
+// Insert new model
+const insertNewModel = async (db, modelName, projectId) => {
+    return new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+            tx.executeSql(
+                `INSERT INTO models (model_name, project_id)
+                    VALUES (?, ?)`,
+                [modelName, projectId],
+                (_, result) => {
+                    console.log('Row inserted to models successfully.');
+                    resolve(result);
+                },
+                (_, error) => {
+                    console.log('Error inserting row into models:', error);
+                    reject(error);
+                }
+            );
+        });
+    });
+};
+
+// Update step numbers for an array of steps
+const updateStepNumbers = async (db, stepArray) => {
+    return new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+            stepArray.forEach((item, index) => {
                 const newStepNumber = index + 1;
                 tx.executeSql(
                     `UPDATE steps SET step_number = ? WHERE step_id = ?`,
@@ -118,6 +161,10 @@ const updateStepNumbers = async (db, updatedOrder) => {
     () => {
         console.log('Transaction successfully committed.');
     });
-}
+};
 
-export { getAllProjects, getAllProjectModels, getAllModelRecipes, getAllRecipeSteps, updateStepNumbers }
+export { 
+    getAllProjects, getAllProjectModels, getAllModelRecipes, 
+    getAllRecipeSteps, updateStepNumbers, insertNewProject, 
+    insertNewModel
+}

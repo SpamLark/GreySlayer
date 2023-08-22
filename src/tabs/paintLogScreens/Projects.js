@@ -24,7 +24,7 @@ const Projects = () => {
     const renderItem = ({item}) => { 
         const handlePress = () => {
               console.log('Item pressed:', item);
-              navigation.navigate('Models', {item});
+              navigation.navigate('Models', item.project_id);
           }
           return (
               <TouchableOpacity onPress={handlePress}>
@@ -65,7 +65,7 @@ const Projects = () => {
           <View style={styles.buttonContainer}>
             <TouchableOpacity 
               style={styles.button}
-              //onPress={()=> navigation.navigate('Add Entry')}
+              onPress={()=> navigation.navigate('Add Project')}
             >
               <Text style={styles.buttonText}>Add Project</Text>
             </TouchableOpacity>

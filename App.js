@@ -26,9 +26,9 @@ export default function App() {
     <DatabaseProvider>
       <NavigationContainer styles={styles.container}>
         <Tab.Navigator>
-          <Tab.Screen name="Tracker" component={Tracker} />
+          <Tab.Screen name="Hobby Tracker" component={Tracker} />
           <Tab.Screen name="Pile of Shame" component={Shame} />         
-          <Tab.Screen name="Log" component={PaintLog} />
+          <Tab.Screen name="Paint Log" component={PaintLog} />
         </Tab.Navigator>
       </NavigationContainer>
       <StatusBar style="auto" />
