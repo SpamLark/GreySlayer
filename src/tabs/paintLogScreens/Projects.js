@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, Image, ScrollView, TextInput, StyleSheet, LogBox, TouchableOpacity } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { useDatabase } from '../../services/database/DatabaseContext';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { getAllProjects, updateProjectNumbers, deleteProject } from '../../services/paintLogServices';
@@ -28,10 +27,6 @@ const Projects = () => {
 
   // Render project items
   const renderItem = ({item, drag, isActive}) => { 
-      // const handlePress = () => {
-      //       console.log('Item pressed:', item);
-      //       navigation.navigate('Models', item.project_id);
-      //   }
     return (
       <ScaleDecorator>
         <SwipeableItem
@@ -102,6 +97,8 @@ const Projects = () => {
     }
   },[isFocused]);
 
+  // COMPONENT RETURN
+
   return (
     <SlayerList 
       data={projects}
@@ -115,6 +112,8 @@ const Projects = () => {
   );
 
 }
+
+// STYLE
 
 const styles = StyleSheet.create({
     container: {
@@ -157,6 +156,6 @@ const styles = StyleSheet.create({
       color: '#fff',
       fontSize: 16,
     }
-  });
+});
 
 export default Projects;
