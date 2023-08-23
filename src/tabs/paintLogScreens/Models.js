@@ -88,7 +88,7 @@ const Models = ({route}) => {
     }
   };
 
-  //LIFECYCLE FUNCTIONS
+  // LIFECYCLE FUNCTIONS
 
   // Get models from the database for the project using project_id from route prop
   const getModels = async () => {
@@ -118,23 +118,6 @@ const Models = ({route}) => {
       parentId={projectId}
       item={'Model'}
     />
-      // <View style={styles.container}>
-      //   <View style={styles.flashlistContainer}>
-      //     <FlashList 
-      //         data={models}
-      //         renderItem={renderItem}
-      //         estimatedItemSize={200}
-      //     />
-      //   </View>
-      //   <View style={styles.buttonContainer}>
-      //     <TouchableOpacity 
-      //       style={styles.button}
-      //       onPress={()=> navigation.navigate('Add Model', projectId)}
-      //     >
-      //       <Text style={styles.buttonText}>Add Model</Text>
-      //     </TouchableOpacity>
-      //   </View>
-      // </View>
   );
 
 }
