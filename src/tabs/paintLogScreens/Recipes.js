@@ -1,82 +1,124 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, Text, Image, ScrollView, TextInput, StyleSheet, LogBox, TouchableOpacity } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
+import React, { useState, useEffect } from 'react';
+import { View, Text, StyleSheet,TouchableOpacity } from 'react-native';
 import { useDatabase } from '../../services/database/DatabaseContext';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { getAllModelRecipes } from '../../services/paintLogServices';
+import SlayerList from '../../components/SlayerList';
+import { deleteRecipe, updateRecipeNumbers } from '../../services/paintLogServices';
+import { ScaleDecorator } from 'react-native-draggable-flatlist';
+import SwipeableItem from 'react-native-swipeable-item';
+import DeleteUnderlay from '../../components/DeleteUnderlay';
 
 
 const Recipes = ({route}) => {
 
-    // Extract the model id from the route parameters
-    const modelId = route.params;
-    
-    // Declare is focused to hold focus state of the screen
-    const isFocused = useIsFocused();
+  // Extract the model id from the route parameters
+  const modelId = route.params;
+  
+  // Declare is focused to hold focus state of the screen
+  const isFocused = useIsFocused();
 
-    //Declare navigation to support stack navigation
-    const navigation = useNavigation();
+  //Declare navigation to support stack navigation
+  const navigation = useNavigation();
 
-    // Use shared database connection
-    const db = useDatabase();
+  // Use shared database connection
+  const db = useDatabase();
 
-    // Declare state variable to hold models
-    const [recipes, setRecipes] = useState();
+  // Declare state variable to hold models
+  const [recipes, setRecipes] = useState([]);
 
-    // Used by FlashList of projects to control display and behaviour
-    const renderItem = ({item}) => { 
-        const handlePress = () => {
-              console.log('Item pressed:', item);
-              navigation.navigate('Steps', item.recipe_id);
-          }
-          return (
-              <TouchableOpacity onPress={handlePress}>
-                <View style={styles.horizontalListContainer}>
-                  <View>
-                    <Text>{item.recipe_name}</Text>
-                  </View>
-                </View>
-              </TouchableOpacity>
-          );
-      };
+  //EVENT HANDLERS
 
-    // Get recipes from the database for the model using model_id from route prop
-    const getRecipes = async () => {
-        try {
-        setRecipes(await getAllModelRecipes(db, modelId));
-        } catch (error) {
-        console.log('Error retrieving recipes:', error);
-        }
-    };
-
-    // On focus, retrieve current data from the projects table
-    useEffect(() => {
-        if (isFocused) {
-        getRecipes();
-        }
-    },[isFocused]);
-
+  // Render recipe items
+  const renderItem = ({item, drag, isActive}) => { 
     return (
-        <View style={styles.container}>
-          <View style={styles.flashlistContainer}>
-            <FlashList 
-                data={recipes}
-                renderItem={renderItem}
-                estimatedItemSize={200}
-            />
-          </View>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity 
-              style={styles.button}
-              onPress={()=> navigation.navigate('Add Recipe', modelId)}
-            >
-              <Text style={styles.buttonText}>Add Recipe</Text>
-            </TouchableOpacity>
-          </View>
-        </View>
-      );
+      <ScaleDecorator>
+        <SwipeableItem
+          onChange={(state) => {
+            console.log(state);
+          }}
+          renderUnderlayLeft={() => <DeleteUnderlay deleteItem={handleDelete} itemId={item.recipe_id}/>}
+          snapPointsLeft={[150]}
+        >
+          <TouchableOpacity 
+            onPress={() => handlePress(item)}
+            onLongPress={drag}
+            disabled={isActive}
+          >
+            <View style={styles.horizontalListContainer}>
+              <View>
+                <Text>{item.recipe_name}</Text>
+              </View>
+            </View>
+          </TouchableOpacity>
+        </SwipeableItem>
+      </ScaleDecorator>
+    );
+  };
+
+    // Handle drag-and-drop re-ordering
+  const updateRecipeOrder = async (data) => {
+    console.log('Running update recipe order.')
+    setRecipes(data);
+    try {
+        await updateRecipeNumbers(db, data);
+    } catch (error) {
+        console.log('Error updating recipe order in the database: ', error);
+    }
+  };
+
+  // Handle item presses
+  const handlePress = (item) => {
+    console.log('Item pressed:', item);
+    navigation.navigate('Steps', item.recipe_id);
+  }
+  
+  // Handle delete presses
+  const handleDelete = async (db, recipeId) => {
+    try {
+      await deleteRecipe(db, recipeId);
+      // After recipe is deleted successfully, get a fresh pull of recipes
+      await getRecipes();
+    } catch (error) {
+      console.log('Error deleting recipe: ', error);
+    }
+  };
+
+  // LIFECYCLE FUNCTIONS
+
+  // Get recipes from the database for the model using model_id from route prop
+  const getRecipes = async () => {
+      try {
+      setRecipes(await getAllModelRecipes(db, modelId));
+      } catch (error) {
+      console.log('Error retrieving recipes:', error);
+      }
+  };
+
+  // On focus, retrieve current data from the projects table
+  useEffect(() => {
+      if (isFocused) {
+      getRecipes();
+      }
+  },[isFocused]);
+
+  // COMPONENT RETURN
+
+  return (
+    <SlayerList 
+      data={recipes}
+      updateListOrder={updateRecipeOrder}
+      keyExtractor={(item) => item.recipe_id}
+      renderItem={renderItem}
+      addForm={'Add Recipe'}
+      parentId={modelId}
+      item={'Recipe'}
+    />
+  );
 
 }
+
+// STYLE
 
 const styles = StyleSheet.create({
     container: {
