@@ -119,8 +119,8 @@ const insertNewModel = async (db, modelName, projectId) => {
     return new Promise((resolve, reject) => {
         db.transaction((tx) => {
             tx.executeSql(
-                `INSERT INTO models (model_name, project_id, module_number)
-                    VALUES (?, ?, (SELECT MAX(r2.model_number) + 1 FROM models m2 WHERE project_id = m2.project_id));`,
+                `INSERT INTO models (model_name, project_id, model_number)
+                    VALUES (?, ?, (SELECT MAX(m2.model_number) + 1 FROM models m2 WHERE project_id = m2.project_id));`,
                 [modelName, projectId],
                 (_, result) => {
                     console.log('Row inserted to models successfully.');
