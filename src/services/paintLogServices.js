@@ -4,7 +4,8 @@ const getAllProjects = async (db) => {
         db.transaction((tx) => {
             tx.executeSql(
                 `SELECT *
-                FROM projects;`,
+                FROM projects
+                ORDER BY project_number;`,
                 [],
                 (_, { rows }) => {
                 const items = rows._array;
@@ -27,7 +28,8 @@ const getAllProjectModels = async (db, projectId) => {
             tx.executeSql(
                 `SELECT *
                 FROM models
-                WHERE project_id = ?;`,
+                WHERE project_id = ?
+                ORDER BY model_number;`,
                 [projectId],
                 (_, { rows }) => {
                 const items = rows._array;
@@ -117,8 +119,8 @@ const insertNewModel = async (db, modelName, projectId) => {
     return new Promise((resolve, reject) => {
         db.transaction((tx) => {
             tx.executeSql(
-                `INSERT INTO models (model_name, project_id)
-                    VALUES (?, ?);`,
+                `INSERT INTO models (model_name, project_id, module_number)
+                    VALUES (?, ?, (SELECT MAX(r2.model_number) + 1 FROM models m2 WHERE project_id = m2.project_id));`,
                 [modelName, projectId],
                 (_, result) => {
                     console.log('Row inserted to models successfully.');
@@ -129,6 +131,69 @@ const insertNewModel = async (db, modelName, projectId) => {
                     reject(error);
                 }
             );
+        });
+    });
+};
+
+// Update model numbers for an array of models
+const updateModelNumbers = async (db, modelArray) => {
+    return new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+            modelArray.forEach((item, index) => {
+                const newModelNumber = index + 1;
+                console.log('Updating', item.model_id);
+                tx.executeSql(
+                    `UPDATE models SET model_number = ? WHERE model_id = ?;`,
+                    [newModelNumber, item.model_id],
+                    (_, { rows }) => {
+                    const items = rows._array;
+                    console.log(items);
+                    resolve(items);
+                    },
+                    (_, error) => {
+                    console.log('Error:', error);
+                    // Reject promise
+                    reject(error);
+                    }
+                );
+            });
+        });
+    },
+    (error) => {
+        console.log('Transaction error:', error);
+        reject(error);
+    },
+    () => {
+        console.log('Transaction successfully committed.');
+    });
+};
+
+// Delete model
+const deleteModel = async (db, modelId) => {
+    return new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+            // Remove grandchild steps first
+            tx.executeSql(
+                `DELETE FROM steps 
+                WHERE recipe_id IN (SELECT r2.recipe_id FROM recipes r2 WHERE model_id = ?);`, 
+                [modelId]
+            )
+            // Then remove child recipes
+            tx.executeSql(
+                `DELETE FROM recipes WHERE model_id = ?`,
+                [modelId]
+            )
+            // Finally, remove model
+            tx.executeSql(
+                `DELETE FROM models WHERE model_id = ?;`, 
+                [modelId]
+            )
+        }, error => {
+            console.log('error executing model delete:', error);
+            reject(error);
+        }, () => {
+            console.log('model and all child records deleted successfully.');
+            resolve();
         });
     });
 };
@@ -280,5 +345,6 @@ export {
     getAllProjects, getAllProjectModels, getAllModelRecipes, 
     getAllRecipeSteps, updateStepNumbers, insertNewProject, 
     insertNewModel, insertNewRecipe, insertNewStep, deleteStep,
-    updateRecipeNumbers, deleteRecipe
+    updateRecipeNumbers, deleteRecipe, updateModelNumbers, 
+    deleteModel
 }

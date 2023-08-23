@@ -2,9 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet,TouchableOpacity } from 'react-native';
 import { useDatabase } from '../../services/database/DatabaseContext';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-import { getAllModelRecipes } from '../../services/paintLogServices';
+import { getAllModelRecipes, deleteRecipe, updateRecipeNumbers } from '../../services/paintLogServices';
 import SlayerList from '../../components/SlayerList';
-import { deleteRecipe, updateRecipeNumbers } from '../../services/paintLogServices';
 import { ScaleDecorator } from 'react-native-draggable-flatlist';
 import SwipeableItem from 'react-native-swipeable-item';
 import DeleteUnderlay from '../../components/DeleteUnderlay';
@@ -56,7 +55,7 @@ const Recipes = ({route}) => {
     );
   };
 
-    // Handle drag-and-drop re-ordering
+  // Handle drag-and-drop re-ordering
   const updateRecipeOrder = async (data) => {
     console.log('Running update recipe order.')
     setRecipes(data);
@@ -88,18 +87,18 @@ const Recipes = ({route}) => {
 
   // Get recipes from the database for the model using model_id from route prop
   const getRecipes = async () => {
-      try {
+    try {
       setRecipes(await getAllModelRecipes(db, modelId));
-      } catch (error) {
+    } catch (error) {
       console.log('Error retrieving recipes:', error);
-      }
+    }
   };
 
   // On focus, retrieve current data from the projects table
   useEffect(() => {
-      if (isFocused) {
+    if (isFocused) {
       getRecipes();
-      }
+    }
   },[isFocused]);
 
   // COMPONENT RETURN
