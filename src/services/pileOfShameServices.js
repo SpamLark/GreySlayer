@@ -5,7 +5,7 @@ const getAllCurrentPileOfShameEntries = async (db) => {
             tx.executeSql(
                 `SELECT kit_id, kit_name, num_models, kit_value, status_id
                 FROM model_kits
-                WHERE status_id = 1`,
+                WHERE status_id = 1;`,
                 [],
                 (_, { rows }) => {
                 const items = rows._array;
@@ -66,7 +66,7 @@ const insertNewPileOfShameEntry = async (db, kitName, numModels, kitValue) => {
         db.transaction((tx) => {
             tx.executeSql(
                 `INSERT INTO model_kits (kit_name, num_models, kit_value, status_id)
-                    VALUES (?, ?, ?, 1)`,
+                    VALUES (?, ?, ?, 1);`,
                 [kitName, numModels, kitValue],
                 (_, result) => {
                     console.log('Row inserted to model_kits successfully.');
@@ -90,7 +90,7 @@ const updatePileOfShameEntryStatus = async (db, kitId, statusId) => {
     return new Promise((resolve, reject) => {
         db.transaction((tx) => {
             tx.executeSql(
-                `UPDATE model_kits SET status_id = ? WHERE kit_id = ?`,
+                `UPDATE model_kits SET status_id = ? WHERE kit_id = ?;`,
                 [statusId, kitId],
                 (_, result) => {
                     console.log('kit_id', kitId, 'updated successfully with status id', statusId);

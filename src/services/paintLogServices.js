@@ -4,7 +4,7 @@ const getAllProjects = async (db) => {
         db.transaction((tx) => {
             tx.executeSql(
                 `SELECT *
-                FROM projects`,
+                FROM projects;`,
                 [],
                 (_, { rows }) => {
                 const items = rows._array;
@@ -27,7 +27,7 @@ const getAllProjectModels = async (db, projectId) => {
             tx.executeSql(
                 `SELECT *
                 FROM models
-                WHERE project_id = ?`,
+                WHERE project_id = ?;`,
                 [projectId],
                 (_, { rows }) => {
                 const items = rows._array;
@@ -50,7 +50,8 @@ const getAllModelRecipes = async (db, modelId) => {
             tx.executeSql(
                 `SELECT *
                 FROM recipes
-                WHERE model_id = ?`,
+                WHERE model_id = ?
+                ORDER BY recipe_number;`,
                 [modelId],
                 (_, { rows }) => {
                 const items = rows._array;
@@ -74,7 +75,7 @@ const getAllRecipeSteps = async (db, recipeId) => {
                 `SELECT *
                 FROM steps
                 WHERE recipe_id = ?
-                ORDER BY step_number`,
+                ORDER BY step_number;`,
                 [recipeId],
                 (_, { rows }) => {
                 const items = rows._array;
@@ -96,7 +97,7 @@ const insertNewProject = async (db, projectName, modelRange) => {
         db.transaction((tx) => {
             tx.executeSql(
                 `INSERT INTO projects (project_name, model_range)
-                    VALUES (?, ?)`,
+                    VALUES (?, ?);`,
                 [projectName, modelRange],
                 (_, result) => {
                     console.log('Row inserted to projects successfully.');
@@ -117,7 +118,7 @@ const insertNewModel = async (db, modelName, projectId) => {
         db.transaction((tx) => {
             tx.executeSql(
                 `INSERT INTO models (model_name, project_id)
-                    VALUES (?, ?)`,
+                    VALUES (?, ?);`,
                 [modelName, projectId],
                 (_, result) => {
                     console.log('Row inserted to models successfully.');
@@ -137,8 +138,8 @@ const insertNewRecipe = async (db, recipeName, modelId) => {
     return new Promise((resolve, reject) => {
         db.transaction((tx) => {
             tx.executeSql(
-                `INSERT INTO recipes (recipe_name, model_id)
-                    VALUES (?, ?)`,
+                `INSERT INTO recipes (recipe_name, model_id, recipe_number)
+                    VALUES (?, ?, (SELECT MAX(r2.recipe_number) + 1 FROM recipes r2 WHERE model_id = r2.model_id));`,
                 [recipeName, modelId],
                 (_, result) => {
                     console.log('Row inserted to recipes successfully.');
@@ -149,6 +150,54 @@ const insertNewRecipe = async (db, recipeName, modelId) => {
                     reject(error);
                 }
             );
+        });
+    });
+};
+
+// Update recipe numbers for an array of recipes
+const updateRecipeNumbers = async (db, recipeArray) => {
+    return new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+            recipeArray.forEach((item, index) => {
+                const newRecipeNumber = index + 1;
+                tx.executeSql(
+                    `UPDATE recipes SET recipe_number = ? WHERE recipe_id = ?;`,
+                    [newRecipeNumber, item.recipe_id],
+                    (_, { rows }) => {
+                    const items = rows._array;
+                    resolve(items);
+                    },
+                    (_, error) => {
+                    console.log('Error:', error);
+                    // Reject promise
+                    reject(error);
+                    }
+                );
+            });
+        });
+    },
+    (error) => {
+        console.log('Transaction error:', error);
+        reject(error);
+    },
+    () => {
+        console.log('Transaction successfully committed.');
+    });
+};
+
+// Delete recipe
+const deleteRecipe = async (db, recipeId) => {
+    return new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+            // Remove any child steps first
+            tx.executeSql(`DELETE FROM steps WHERE recipe_id = ?;`, [recipeId])
+            tx.executeSql(`DELETE FROM recipes WHERE recipe_id = ?;`, [recipeId])
+        }, error => {
+            console.log('error executing recipe delete:', error);
+            reject(error);
+        }, () => {
+            console.log('recipe and associated steps deleted successfully.');
+            resolve();
         });
     });
 };
@@ -181,7 +230,7 @@ const updateStepNumbers = async (db, stepArray) => {
             stepArray.forEach((item, index) => {
                 const newStepNumber = index + 1;
                 tx.executeSql(
-                    `UPDATE steps SET step_number = ? WHERE step_id = ?`,
+                    `UPDATE steps SET step_number = ? WHERE step_id = ?;`,
                     [newStepNumber, item.step_id],
                     (_, { rows }) => {
                     const items = rows._array;
@@ -230,5 +279,6 @@ const deleteStep = async (db, stepId) => {
 export { 
     getAllProjects, getAllProjectModels, getAllModelRecipes, 
     getAllRecipeSteps, updateStepNumbers, insertNewProject, 
-    insertNewModel, insertNewRecipe, insertNewStep, deleteStep
+    insertNewModel, insertNewRecipe, insertNewStep, deleteStep,
+    updateRecipeNumbers, deleteRecipe
 }

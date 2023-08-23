@@ -27,6 +27,7 @@ const Models = ({route}) => {
     const renderItem = ({item}) => { 
         const handlePress = () => {
               console.log('Item pressed:', item);
+              console.log(item.model_id);
               navigation.navigate('Recipes', item.model_id);
           }
           return (

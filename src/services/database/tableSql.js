@@ -10,6 +10,7 @@ status_description TEXT NOT NULL
   
 export const CREATE_MODEL_KITS_SQL = `CREATE TABLE model_kits (
     kit_id INTEGER PRIMARY KEY,
+    kit_number INTEGER NOT NULL,
     kit_name TEXT NOT NULL,
     num_models INTEGER NOT NULL,
     kit_value NUMERIC NOT NULL,
@@ -19,12 +20,14 @@ export const CREATE_MODEL_KITS_SQL = `CREATE TABLE model_kits (
 
 export const CREATE_PROJECTS_SQL = `CREATE TABLE projects (
     project_id INTEGER PRIMARY KEY,
+    project_number INTEGER NOT NULL,
     project_name TEXT NOT NULL,
     model_range TEXT
 );`
 
 export const CREATE_MODELS_SQL = `CREATE TABLE models (
     model_id INTEGER PRIMARY KEY,
+    model_number INTEGER NOT NULL,
     model_name TEXT NOT NULL,
     project_id INTEGER NOT NULL,
     FOREIGN KEY (project_id) REFERENCES projects (project_id)
@@ -32,6 +35,7 @@ export const CREATE_MODELS_SQL = `CREATE TABLE models (
 
 export const CREATE_RECIPES_SQL = `CREATE TABLE recipes (
     recipe_id INTEGER PRIMARY KEY,
+    recipe_number INTEGER NOT NULL,
     recipe_name TEXT NOT NULL,
     model_id INTEGER NOT NULL,
     FOREIGN KEY (model_id) REFERENCES models (model_id)

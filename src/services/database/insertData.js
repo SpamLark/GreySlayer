@@ -33,15 +33,15 @@ const insertStatusLookupData = async (db) => {
 // Insert dummy model_kits data
 const insertModelKitData = async (db) => {
     db.transaction(tx => {
-        tx.executeSql(`INSERT INTO model_kits (kit_name, num_models, kit_value, status_id) VALUES ('Blood Knights', 5, 50, 1);`);
-        tx.executeSql(`INSERT INTO model_kits (kit_name, num_models, kit_value, status_id) VALUES ('Vampire Lord', 1, 25, 1);`);
-        tx.executeSql(`INSERT INTO model_kits (kit_name, num_models, kit_value, status_id) VALUES ('Genestealer Goliath Truck', 1, 35, 3);`);
-        tx.executeSql(`INSERT INTO model_kits (kit_name, num_models, kit_value, status_id) VALUES ('Delaque Gang', 10, 30, 2);`);
-        tx.executeSql(`INSERT INTO model_kits (kit_name, num_models, kit_value, status_id) VALUES ('Zombies', 20, 25, 1);`);
-        tx.executeSql(`INSERT INTO model_kits (kit_name, num_models, kit_value, status_id) VALUES ('Cadian Command Squad', 5, 30, 1);`);
-        tx.executeSql(`INSERT INTO model_kits (kit_name, num_models, kit_value, status_id) VALUES ('Sentinel', 1, 25, 1);`);
-        tx.executeSql(`INSERT INTO model_kits (kit_name, num_models, kit_value, status_id) VALUES ('Alariel', 1, 75, 2);`);
-        tx.executeSql(`INSERT INTO model_kits (kit_name, num_models, kit_value, status_id) VALUES ('Land Raider', 1, 50, 1);`);
+        tx.executeSql(`INSERT INTO model_kits (kit_name, kit_number, num_models, kit_value, status_id) VALUES ('Blood Knights', 1, 5, 50, 1);`);
+        tx.executeSql(`INSERT INTO model_kits (kit_name, kit_number, num_models, kit_value, status_id) VALUES ('Vampire Lord', 2, 1, 25, 1);`);
+        tx.executeSql(`INSERT INTO model_kits (kit_name, kit_number, num_models, kit_value, status_id) VALUES ('Genestealer Goliath Truck', 3, 1, 35, 3);`);
+        tx.executeSql(`INSERT INTO model_kits (kit_name, kit_number, num_models, kit_value, status_id) VALUES ('Delaque Gang', 4, 10, 30, 2);`);
+        tx.executeSql(`INSERT INTO model_kits (kit_name, kit_number, num_models, kit_value, status_id) VALUES ('Zombies', 5, 20, 25, 1);`);
+        tx.executeSql(`INSERT INTO model_kits (kit_name, kit_number, num_models, kit_value, status_id) VALUES ('Cadian Command Squad', 6, 5, 30, 1);`);
+        tx.executeSql(`INSERT INTO model_kits (kit_name, kit_number, num_models, kit_value, status_id) VALUES ('Sentinel', 7, 1, 25, 1);`);
+        tx.executeSql(`INSERT INTO model_kits (kit_name, kit_number, num_models, kit_value, status_id) VALUES ('Alariel', 8, 1, 75, 2);`);
+        tx.executeSql(`INSERT INTO model_kits (kit_name, kit_number, num_models, kit_value, status_id) VALUES ('Land Raider', 9, 1, 50, 1);`);
     }, error => {
         console.log('error inserting model_kit data:', error);
     }, () => {
@@ -52,9 +52,9 @@ const insertModelKitData = async (db) => {
 // Insert dummy projects data
 const insertProjectData = async (db) => {
     db.transaction(tx => {
-        tx.executeSql(`INSERT INTO projects (project_id, project_name) VALUES (1, 'Soulblight Gravelords');`);
-        tx.executeSql(`INSERT INTO projects (project_id, project_name) VALUES (2, 'Astra Militarum');`);
-        tx.executeSql(`INSERT INTO projects (project_id, project_name) VALUES (3, 'Delaque Gang');`);
+        tx.executeSql(`INSERT INTO projects (project_id, project_number, project_name) VALUES (1, 1, 'Soulblight Gravelords');`);
+        tx.executeSql(`INSERT INTO projects (project_id, project_number, project_name) VALUES (2, 2, 'Astra Militarum');`);
+        tx.executeSql(`INSERT INTO projects (project_id, project_number, project_name) VALUES (3, 3, 'Delaque Gang');`);
     }, error => {
         console.log('error inserting projects data:', error);
     }, () => {
@@ -65,13 +65,13 @@ const insertProjectData = async (db) => {
 // Insert dummy models data
 const insertModelsData = async (db) => {
     db.transaction(tx => {
-        tx.executeSql(`INSERT INTO models (model_id, model_name, project_id) VALUES (1, 'Skeletons', 1);`);
-        tx.executeSql(`INSERT INTO models (model_id, model_name, project_id) VALUES (2, 'Zombies', 1);`);
-        tx.executeSql(`INSERT INTO models (model_id, model_name, project_id) VALUES (3, 'Dire Wolves', 1);`);
-        tx.executeSql(`INSERT INTO models (model_id, model_name, project_id) VALUES (4, 'Zombie Dragon', 1);`);
-        tx.executeSql(`INSERT INTO models (model_id, model_name, project_id) VALUES (5, 'Infantry', 2);`);
-        tx.executeSql(`INSERT INTO models (model_id, model_name, project_id) VALUES (6, 'Tanks', 2);`);
-        tx.executeSql(`INSERT INTO models (model_id, model_name, project_id) VALUES (7, 'Ganger', 3);`);
+        tx.executeSql(`INSERT INTO models (model_id, model_number, model_name, project_id) VALUES (1, 1, 'Skeletons', 1);`);
+        tx.executeSql(`INSERT INTO models (model_id, model_number, model_name, project_id) VALUES (2, 2, 'Zombies', 1);`);
+        tx.executeSql(`INSERT INTO models (model_id, model_number, model_name, project_id) VALUES (3, 3, 'Dire Wolves', 1);`);
+        tx.executeSql(`INSERT INTO models (model_id, model_number, model_name, project_id) VALUES (4, 4, 'Zombie Dragon', 1);`);
+        tx.executeSql(`INSERT INTO models (model_id, model_number, model_name, project_id) VALUES (5, 1, 'Infantry', 2);`);
+        tx.executeSql(`INSERT INTO models (model_id, model_number, model_name, project_id) VALUES (6, 2, 'Tanks', 2);`);
+        tx.executeSql(`INSERT INTO models (model_id, model_number, model_name, project_id) VALUES (7, 1, 'Ganger', 3);`);
     }, error => {
         console.log('error inserting models data:', error);
     }, () => {
@@ -82,10 +82,10 @@ const insertModelsData = async (db) => {
 // Insert dummy recipes data
 const insertRecipesData = async (db) => {
     db.transaction(tx => {
-        tx.executeSql(`INSERT INTO recipes (recipe_id, recipe_name, model_id) VALUES (1, 'Bone', 1);`);
-        tx.executeSql(`INSERT INTO recipes (recipe_id, recipe_name, model_id) VALUES (2, 'Cloth', 1);`);
-        tx.executeSql(`INSERT INTO recipes (recipe_id, recipe_name, model_id) VALUES (3, 'Metals', 1);`);
-        tx.executeSql(`INSERT INTO recipes (recipe_id, recipe_name, model_id) VALUES (4, 'Base', 1);`);
+        tx.executeSql(`INSERT INTO recipes (recipe_id, recipe_number, recipe_name, model_id) VALUES (1, 1, 'Bone', 1);`);
+        tx.executeSql(`INSERT INTO recipes (recipe_id, recipe_number, recipe_name, model_id) VALUES (2, 2, 'Cloth', 1);`);
+        tx.executeSql(`INSERT INTO recipes (recipe_id, recipe_number, recipe_name, model_id) VALUES (3, 3, 'Metals', 1);`);
+        tx.executeSql(`INSERT INTO recipes (recipe_id, recipe_number, recipe_name, model_id) VALUES (4, 4, 'Base', 1);`);
     }, error => {
         console.log('error inserting recipes data:', error);
     }, () => {
