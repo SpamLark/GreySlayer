@@ -98,8 +98,8 @@ const insertNewProject = async (db, projectName, modelRange) => {
     return new Promise((resolve, reject) => {
         db.transaction((tx) => {
             tx.executeSql(
-                `INSERT INTO projects (project_name, model_range)
-                    VALUES (?, ?);`,
+                `INSERT INTO projects (project_name, model_range, project_number)
+                    VALUES (?, ?, (SELECT MAX(project_number) + 1 FROM projects));`,
                 [projectName, modelRange],
                 (_, result) => {
                     console.log('Row inserted to projects successfully.');
@@ -110,6 +110,78 @@ const insertNewProject = async (db, projectName, modelRange) => {
                     reject(error);
                 }
             );
+        });
+    });
+};
+
+// Update project numbers for an array of projects
+const updateProjectNumbers = async (db, projectArray) => {
+    return new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+            projectArray.forEach((item, index) => {
+                const newProjectNumber = index + 1;
+                tx.executeSql(
+                    `UPDATE projects SET project_number = ? WHERE project_id = ?;`,
+                    [newProjectNumber, item.project_id],
+                    (_, { rows }) => {
+                    const items = rows._array;
+                    resolve(items);
+                    },
+                    (_, error) => {
+                    console.log('Error:', error);
+                    // Reject promise
+                    reject(error);
+                    }
+                );
+            });
+        });
+    },
+    (error) => {
+        console.log('Transaction error:', error);
+        reject(error);
+    },
+    () => {
+        console.log('Transaction successfully committed.');
+    });
+};
+
+// Delete project
+const deleteProject = async (db, projectId) => {
+    return new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+            // Remove great-grandchild steps first
+            tx.executeSql(
+                `DELETE FROM steps 
+                WHERE recipe_id IN (
+                    SELECT r2.recipe_id FROM recipes r2 WHERE r2.model_id IN (
+                        SELECT m2.model_id FROM models m2 WHERE m2.project_id = ?
+                    )
+                );`, 
+                [projectId]
+            )
+            // Then remove grandchild recipes
+            tx.executeSql(
+                `DELETE FROM recipes 
+                WHERE model_id IN (SELECT m2.model_id FROM models m2 WHERE m2.project_id = ?);`,
+                [projectId]
+            )
+            // Then remove child models
+            tx.executeSql(
+                `DELETE FROM models 
+                WHERE project_id = ?;`,
+                [projectId]
+            )
+            // Finally, remove project
+            tx.executeSql(
+                `DELETE FROM projects WHERE project_id = ?;`, 
+                [projectId]
+            )
+        }, error => {
+            console.log('error executing project delete:', error);
+            reject(error);
+        }, () => {
+            console.log('project and all child records deleted successfully.');
+            resolve();
         });
     });
 };
@@ -346,5 +418,5 @@ export {
     getAllRecipeSteps, updateStepNumbers, insertNewProject, 
     insertNewModel, insertNewRecipe, insertNewStep, deleteStep,
     updateRecipeNumbers, deleteRecipe, updateModelNumbers, 
-    deleteModel
+    deleteModel, updateProjectNumbers, deleteProject
 }
