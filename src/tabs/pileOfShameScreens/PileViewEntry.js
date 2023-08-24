@@ -9,7 +9,7 @@ import { updatePileOfShameEntryStatus } from '../../services/pileOfShameServices
 const PileViewEntry = ({route}) => {
 
     // Extract the details of the item sent via the route prop
-    const item = route.params.item;
+    const item = route.params;
 
     //Declare navigation to support stack navigation
     const navigation = useNavigation();

@@ -1,9 +1,9 @@
 // Insert dummy check-in data
 const insertCheckInData = async (db) => {
     db.transaction(tx => {
-        tx.executeSql(`INSERT INTO check_ins (check_in_date) VALUES ('2023-08-17');`);
-        tx.executeSql(`INSERT INTO check_ins (check_in_date) VALUES ('2023-08-18');`);
-        tx.executeSql(`INSERT INTO check_ins (check_in_date) VALUES ('2023-08-01');`);
+        tx.executeSql(`INSERT INTO check_ins (check_in_date) VALUES ('2023-08-23');`);
+        tx.executeSql(`INSERT INTO check_ins (check_in_date) VALUES ('2023-08-22');`);
+        tx.executeSql(`INSERT INTO check_ins (check_in_date) VALUES ('2023-08-21');`);
         tx.executeSql(`INSERT INTO check_ins (check_in_date) VALUES ('2023-08-12');`);
         tx.executeSql(`INSERT INTO check_ins (check_in_date) VALUES ('2023-08-31');`);
         tx.executeSql(`INSERT INTO check_ins (check_in_date) VALUES ('2023-09-01');`);

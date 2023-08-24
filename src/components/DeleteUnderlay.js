@@ -9,7 +9,7 @@ const DeleteUnderlay = ({deleteItem, itemId}) => {
     return (
         <View style={[styles.horizontalListContainer, styles.underlayLeft]}>
         <TouchableOpacity onPress={() => deleteItem(db, itemId)}>
-            <Text>DELETE</Text>
+            <Text style={styles.deleteText}>DELETE</Text>
         </TouchableOpacity>
         </View>
     );
@@ -30,9 +30,14 @@ horizontalListContainer: {
 },
 underlayLeft: {
     flex: 1,
-    backgroundColor: 'tomato',
+    backgroundColor: '#cc0e2b',
     justifyContent: 'flex-end',
 },
+deleteText: {
+    fontFamily: 'agdasima-bold',
+    color: '#fff',
+    fontSize: 18
+}
 });
 
 export default DeleteUnderlay;

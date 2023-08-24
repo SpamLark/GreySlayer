@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import Tracker from './src/tabs/HobbyTracker';
 import Shame from './src/tabs/PileOfShame';
 import PaintLog from './src/tabs/PaintLog';
@@ -8,6 +8,12 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { DatabaseProvider } from './src/services/database/DatabaseContext';
 import createTables from './src/services/database/createTables';
 import * as SQLite from 'expo-sqlite';
+import { IconRegistry } from '@ui-kitten/components';
+import { EvaIconsPack } from '@ui-kitten/eva-icons';
+import { Icon } from '@ui-kitten/components';
+import { useFonts } from 'expo-font';
+import { Text } from 'react-native';
+
 
 const Tab = createBottomTabNavigator();
 
@@ -21,18 +27,78 @@ db.exec([{ sql: 'PRAGMA foreign_keys = ON;', args: [] }], false, () =>
 createTables(db);
 
 export default function App() {
+  const [fontsLoaded, fontSources] = useFonts({
+    // The name you'll use in styles: the path to the font file
+    'odachi': require('./assets/Odachi.ttf'),
+    'agdasima-bold': require('./assets/Agdasima-Bold.ttf'),
+    'agdasima-regular': require('./assets/Agdasima-Regular.ttf')
+  });
+
+  console.log('Fonts Loaded:', fontsLoaded);
+  console.log('Loaded Fonts:', fontSources);
+
+  if (!fontsLoaded) {
+    return (<Text>Loading</Text>)
+  }
 
   return (
+    <>
+    <IconRegistry icons={EvaIconsPack} />
     <DatabaseProvider>
       <NavigationContainer styles={styles.container}>
-        <Tab.Navigator>
-          <Tab.Screen name="Hobby Tracker" component={Tracker} />
-          <Tab.Screen name="Pile of Shame" component={Shame} />         
-          <Tab.Screen name="Paint Log" component={PaintLog} />
+        <Tab.Navigator
+          screenOptions={{
+            tabBarActiveTintColor: '#cc0e2b',
+            tabBarLabelStyle: {
+              //fontFamily: 'odachi',
+              //fontSize: 18
+              display: 'none'
+            },
+            headerTitleStyle: {
+              fontFamily: 'agdasima-bold',
+              fontSize: 36,
+              color: '#fff'
+            },
+            headerStyle: {
+              backgroundColor: '#cc0e2b'
+            } 
+          }}
+        >
+          <Tab.Screen 
+            name="HOBBY TRACKER" 
+            component={Tracker} 
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <Icon name="calendar-outline" fill={color} style={{width: size, height: size}} />
+              )
+            }}
+          />
+          <Tab.Screen 
+            name="PILE OF SHAME" 
+            component={Shame}
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <Icon name="archive-outline" fill={color} style={{width: size, height: size}} />
+              ),
+            headerStyle: {
+              backgroundColor: '#636363'
+            }
+            }}
+          />         
+          <Tab.Screen 
+            name="PAINT LOG" 
+            component={PaintLog}
+            options={{
+              tabBarIcon: ({ color, size }) => (
+                <Icon name="brush-outline" fill={color} style={{width: size, height: size}} />
+              )
+            }}
+          />
         </Tab.Navigator>
       </NavigationContainer>
       <StatusBar style="auto" />
     </DatabaseProvider>
+    </>
   );
 }
 

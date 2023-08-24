@@ -20,6 +20,52 @@ const getAllCheckIns = async (db) => {
     });
 };
 
+// Get current hobby streak
+const getCurrentHobbyStreak = async (db) => {
+    return new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+            tx.executeSql( 
+                `WITH RECURSIVE ConsecutiveDates AS (
+                    SELECT
+                      check_in_date,
+                      check_in_date AS ConsecutiveDate,
+                      1 AS ConsecutiveCount
+                    FROM
+                      check_ins
+                    WHERE
+                      check_in_date = ? -- Starting from today
+                  
+                    UNION ALL
+                  
+                    SELECT
+                      c.check_in_date,
+                      t.check_in_date AS ConsecutiveDate,
+                     c.ConsecutiveCount + 1 AS ConsecutiveCount
+                    FROM
+                      ConsecutiveDates c
+                    JOIN
+                      check_ins t ON t.check_in_date = DATE(c.ConsecutiveDate, '-1 day')
+                  )
+                  SELECT
+                    COALESCE(MAX(ConsecutiveCount), 0) AS MaxConsecutiveCount
+                  FROM
+                    ConsecutiveDates;`,
+                [todaysDate()],
+                (_, { rows }) => {
+                const items = rows._array;
+                console.log(items);
+                resolve(items);
+                },
+                (_, error) => {
+                console.log('Error:', error);
+                // Reject promise
+                reject(error);
+                }
+            );
+        });
+    });
+};
+
 // Grabs today's date and formats it as a string matching ISO 8601
 const todaysDate = () => {
     const currentDate = new Date();
@@ -98,4 +144,4 @@ const deleteCheckIn = async (db, checkInDate) => {
 }
 
 
-export { getAllCheckIns, insertCheckIn, todaysDate, deleteCheckIn };
+export { getAllCheckIns, insertCheckIn, todaysDate, deleteCheckIn, getCurrentHobbyStreak };

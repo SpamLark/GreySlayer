@@ -1,10 +1,12 @@
 import { View, Text, Image, ScrollView, TextInput, StyleSheet, LogBox, TouchableOpacity } from 'react-native';
-import { FlashList } from '@shopify/flash-list';
 import React, { useState, useEffect, useCallback } from 'react';
-import { getAllCurrentPileOfShameEntries } from '../../services/pileOfShameServices';
+import { getAllCurrentPileOfShameEntries, getTotalPileValue, deleteKit, updateKitNumbers } from '../../services/pileOfShameServices';
 import { useDatabase } from '../../services/database/DatabaseContext';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
-import { getTotalPileValue } from '../../services/pileOfShameServices';
+import SlayerList from '../../components/SlayerList';
+import { ScaleDecorator } from 'react-native-draggable-flatlist';
+import SwipeableItem from 'react-native-swipeable-item';
+import DeleteUnderlay from '../../components/DeleteUnderlay';
 
 
 const PileOverview = () => {
@@ -19,30 +21,68 @@ const PileOverview = () => {
   const db = useDatabase();
 
   // Declare state variable to hold current pile of shame items
-  const [pileItems, setPileItems] = useState();
+  const [pileItems, setPileItems] = useState([]);
 
-  //Declare state variable to hold total pile of shame value
-  const [pileValue, setPileValue] = useState(0);
+  // EVENT HANDLERS
 
-  // Used by FlashList of model kits to control display and behaviour
-  const renderItem = ({item}) => { 
-    const handlePress = () => {
-          console.log('Item pressed:', item);
-          navigation.navigate('View Entry', {item});
-      }
-      return (
-          <TouchableOpacity onPress={handlePress}>
+  // Render model kit items
+  const renderItem = ({item, drag, isActive}) => { 
+    return (
+      <ScaleDecorator>
+        <SwipeableItem
+          onChange={(state) => {
+            console.log(state);
+          }}
+          renderUnderlayLeft={() => <DeleteUnderlay deleteItem={handleDelete} itemId={item.kit_id}/>}
+          snapPointsLeft={[150]}
+        >
+          <TouchableOpacity 
+            onPress={() => handlePress(item)}
+            onLongPress={drag}
+            disabled={isActive}
+          >
             <View style={styles.horizontalListContainer}>
               <View>
-                <Text>{item.kit_name}</Text>
+                <Text style={styles.listItem}>{item.kit_name}</Text>
               </View>
               <View>
-                <Text>£{(item.kit_value).toFixed(2)}</Text>
+                <Text style={styles.listItem}>£{(item.kit_value).toFixed(2)}</Text>
               </View>
             </View>
           </TouchableOpacity>
-      );
+        </SwipeableItem>
+      </ScaleDecorator>
+    );
   };
+
+  // Handle drag-and-drop re-ordering
+  const updatePileOrder = async (data) => {
+    setPileItems(data);
+    try {
+        await updateKitNumbers(db, data);
+    } catch (error) {
+        console.log('Error updating kit order in the database: ', error);
+    }
+  };
+
+  // Handle item presses
+  const handlePress = (item) => {
+    console.log('Item pressed:', item);
+    navigation.navigate('View Entry', item);
+  }
+  
+  // Handle delete presses
+  const handleDelete = async (db, kitId) => {
+    try {
+      await deleteKit(db, kitId);
+      // After kit is deleted successfully, get a fresh pull of kits
+      await getCurrentPile();
+    } catch (error) {
+      console.log('Error deleting model kit: ', error);
+    }
+  };
+
+  // LIFECYCLE FUNCTIONS
 
   // Gets the current pile of shame entries from the database and puts it in state
   const getCurrentPile = async () => {
@@ -53,90 +93,82 @@ const PileOverview = () => {
     }
   };
 
-    // Get pile value
-    const getValue = async () => {
-      try {
-        const valueItem = (await getTotalPileValue(db));
-        console.log(valueItem);
-        setPileValue(valueItem[0].pile_value);
-        console.log(pileValue);
-      } catch (error) {
-        console.log('Error while retrieving pile value:', error)
-      }
-    }
-
   // On focus, retrieve current data from the model_kits table
   useEffect(() => {
     if (isFocused) {
       getCurrentPile();
-      getValue();
     }
   },[isFocused]);
 
+  // COMPONENT RETURN
 
-    return (
-      <View style={styles.container}>
-        <View style={styles.flashlistContainer}>
-          <FlashList 
-              data={pileItems}
-              renderItem={renderItem}
-              estimatedItemSize={200}
-          />
-        </View>
-        <View style={styles.buttonContainer}>
-          <Text>£{pileValue.toFixed(2)}</Text>
-          <TouchableOpacity 
-            style={styles.button}
-            onPress={()=> navigation.navigate('Add Entry')}
-          >
-            <Text style={styles.buttonText}>Add Entry</Text>
-          </TouchableOpacity>
-        </View>
+  return (
+    <View style={styles.container}>
+      <View style={styles.listContainer}>
+        <SlayerList 
+          data={pileItems}
+          updateListOrder={updatePileOrder}
+          keyExtractor={(item) => item.kit_id}
+          renderItem={renderItem}
+          addForm={'Add Entry'}
+          //parentId={projectId}
+          item={'ENTRY'}
+          
+        />
       </View>
-    );
-  };
+    </View>
+  );
+};
 
-  const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      //alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: 0
-    },
-    horizontalListContainer: {
-      flexDirection: 'row',
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      marginVertical: 2,
-      marginHorizontal: 2,
-      height: 50,
-      padding: 10,
-      borderWidth: 1
-    },
-    buttonContainer: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: 0
-    },
-    flashlistContainer: {
-      height: '70%'
-    },
-    button: {
-      paddingVertical: 8,
-      paddingHorizontal: 12,
-      marginVertical: 30,
-      borderRadius: 5,
-      backgroundColor: '#007BFF',
-    },
-    buttonText: {
-      color: '#fff',
-      fontSize: 16,
-    }
-  });
+// STYLE
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    //alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 0
+  },
+  listContainer: {
+    flex: 9,
+  },
+  horizontalListContainer: {
+    flexDirection: 'row',
+    flex: 1,
+    backgroundColor: '#636363',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginVertical: 2,
+    marginHorizontal: 2,
+    height: 50,
+    padding: 10,
+    borderWidth: 1,
+  },
+  listItem: {
+    fontFamily: 'agdasima-regular',
+    fontSize: 22,
+    color: '#fff'
+  },
+  buttonContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginTop: 0
+  },
+  button: {
+    paddingVertical: 2,
+    paddingHorizontal: 2,
+    marginVertical: 5,
+    marginRight: 5,
+    borderRadius: 5,
+    backgroundColor: '#cc0e2b',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+  }
+});
 
 export default PileOverview;

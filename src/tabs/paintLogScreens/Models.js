@@ -117,6 +117,7 @@ const Models = ({route}) => {
       addForm={'Add Model'}
       parentId={projectId}
       item={'Model'}
+      statDisplay='none'
     />
   );
 

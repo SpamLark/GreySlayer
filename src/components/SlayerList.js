@@ -3,8 +3,9 @@ import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import DraggableFlatList from "react-native-draggable-flatlist";
 import { useNavigation } from '@react-navigation/native';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { Icon } from '@ui-kitten/components';
 
-const SlayerList = ({data, keyExtractor, renderItem, addForm, parentId, item, updateListOrder}) => {
+const SlayerList = ({data, keyExtractor, renderItem, addForm, parentId, item, updateListOrder, statDisplay}) => {
 
 const navigation = useNavigation();
 
@@ -26,8 +27,14 @@ return (
           style={styles.button}
           onPress={()=> navigation.navigate(addForm, parentId)}
         >
-          <Text style={styles.buttonText}>Add {item}</Text>
+          <Text style={styles.buttonText}>ADD {item}</Text>
         </TouchableOpacity>
+          <TouchableOpacity 
+            style={[styles.statsButton, {display: statDisplay}]}
+            onPress={()=> navigation.navigate('View Statistics')}
+          >
+            <Icon name="bar-chart-outline" height={30} width={30} fill='#fff' />
+          </TouchableOpacity>
       </View>
     </View>
   );
@@ -44,7 +51,7 @@ const styles = StyleSheet.create({
     horizontalListContainer: {
       flexDirection: 'row',
       flex: 1,
-      backgroundColor: '#fff',
+      backgroundColor: '#cc0e2b',
       alignItems: 'center',
       justifyContent: 'space-between',
       marginVertical: 2,
@@ -54,25 +61,45 @@ const styles = StyleSheet.create({
       borderWidth: 1
     },
     buttonContainer: {
-      flex: 1,
+      flex: 2,
       backgroundColor: '#fff',
       alignItems: 'center',
       justifyContent: 'center',
-      marginTop: 0
+      marginTop: 0,
+      flexDirection: 'row'
     },
     flashlistContainer: {
-      height: '70%'
+      flex: 8,
+      backgroundColor: '#fff',
+      borderBottomWidth:1,
+      borderTopWidth: 1,
+      borderColor: '#8a8686'
     },
     button: {
       paddingVertical: 8,
       paddingHorizontal: 12,
-      marginVertical: 30,
+      //marginVertical: 20,
       borderRadius: 5,
-      backgroundColor: '#007BFF',
+      backgroundColor: '#cc0e2b',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center'
+    },
+    statsButton: {
+      paddingVertical: 2,
+      paddingHorizontal: 2,
+      //marginVertical: 20,
+      borderRadius: 5,
+      backgroundColor: '#cc0e2b',
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'center'
     },
     buttonText: {
       color: '#fff',
-      fontSize: 16,
+      fontSize: 24,
+      marginHorizontal: 5,
+      fontFamily: 'agdasima-bold'
     },
     underlayLeft: {
       flex: 1,

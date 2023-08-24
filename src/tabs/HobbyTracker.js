@@ -1,12 +1,12 @@
 import {View, Text, StyleSheet, TouchableOpacity, Animated, Alert} from 'react-native';
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, Component, } from 'react';
 import { getAllCheckIns } from '../services/checkInServices';
 import { useDatabase } from '../services/database/DatabaseContext';
 //import CalendarListScreen from '../components/CalendarListSceen';
 import { CalendarList } from 'react-native-calendars';
-import { insertCheckIn, deleteCheckIn, todaysDate } from '../services/checkInServices';
-import { useNavigation, useIsFocused } from '@react-navigation/native';
-import { getTotalPileValue } from '../services/pileOfShameServices';
+import { insertCheckIn, deleteCheckIn, todaysDate, getCurrentHobbyStreak } from '../services/checkInServices';
+import { useIsFocused } from '@react-navigation/native';
+import { Icon } from '@ui-kitten/components';
 
 const Tracker = () => {
 
@@ -24,6 +24,9 @@ const Tracker = () => {
 
   // Declare state variable to track whether user has checked in today
   const [checkedInToday, setCheckedInToday] = useState(false);
+
+  //Declare state variable to hold hobbystreak
+  const [hobbyStreak, setHobbyStreak] = useState(0);
 
   // Declare is focused to hold focus state of the screen
   const isFocused = useIsFocused();
@@ -70,61 +73,93 @@ const Tracker = () => {
       }
   }, [checkIns]);
 
-  // Retrieve checkIns from database on focus
+  const getStreak = async () => {
+    try {
+      const currentStreak = ((await getCurrentHobbyStreak(db))[0].MaxConsecutiveCount);
+      setHobbyStreak(currentStreak);
+    } catch (error) {
+      console.log('Error obtaining current streak', error)
+    }
+  };
+
+  // Retrieve checkIns and hobby streak from database on focus
   useEffect(() => {
     if (isFocused) {
-      console.log('HobbyTracker has focus');
       (async () => {
         try {
           setCheckIns(await getAllCheckIns(db));
         } catch (error) {
-          console.log('This is the error', error);
+          console.log('Error retrieving check in data from database: ', error);
         }
       })();
-    } if (!isFocused) {console.log('HobbyTrackerr has lost focus');}
+    }
   }, [isFocused]);
 
-  // Populate the markedDates object with the dates from checkIns whenever checkIns updates
+  // Populate the markedDates object and hobby streak variable whenever checkIns updates
   useEffect(() => {
     const newMarkedDates = {};
     checkIns.forEach((checkIn) => {
-      newMarkedDates[checkIn.check_in_date] = {selected: true, marked: true, selectedColor: 'red'};
+      newMarkedDates[checkIn.check_in_date] = {selected: true, marked: true, selectedColor: '#cc0e2b'};
     });
     setMarkedDates(newMarkedDates);
+    getStreak();
     const alreadyCheckedInToday = checkIns.some(checkIn => checkIn.check_in_date === today);
     if (alreadyCheckedInToday) {
       setCheckedInToday(true);
-    }
+    };
   }, [checkIns]);
+
+  const theme = {
+    'stylesheet.day.basic': {
+      text:{
+        fontFamily: 'agdasima-regular',
+        fontSize: 18,
+      },
+      todayText:{
+        color:'#636363'
+      }
+    },
+    'stylesheet.calendar.header': {
+      dayHeader:{
+        fontFamily: 'agdasima-bold',
+        fontSize: 22,
+      },
+      monthText:{
+        fontFamily: 'agdasima-bold',
+        fontSize: 26
+      }
+    }
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.calendarContainer}>
         {/*It's really important to set current for the CalendarList so that it renders quickly and avoids looking janky*/}
-          <CalendarList markedDates={markedDates} current={today} onDayPress={onDayPress}/>
+          <CalendarList markedDates={markedDates} current={today} onDayPress={onDayPress} theme={theme} markingType={'custom'}/>
       </View>
-      <View style={styles.container}>
+      <View style={styles.actionContainer}>
         {!checkedInToday ? (
           <TouchableOpacity 
             style={styles.button}
             onPress={
-              async() => {
-                try {
-                  await insertCheckIn(db, today);
-                  setCheckIns(await getAllCheckIns(db));
-                  //setCheckedInToday(true);
-                } catch (error) {
-                  console.log(error);
-                }
+                (async () => {
+                  try {
+                    await insertCheckIn(db, today);
+                    await getStreak();
+                    setCheckIns(await getAllCheckIns(db));
+                  } catch (error) {
+                    console.log(error);
+                  }
+                })
               }
-            }
           >
-            <Text style={styles.buttonText}>Check In</Text>
+            <Icon name="checkmark-outline" fill='white' height={50} width={50}/>
           </TouchableOpacity>
         ) : (
           <>
-            <Text>Congratulations!</Text>
-            <Text>You checked in today</Text>
+            <Icon name="checkmark-circle-outline" height={40} width={40} fill='#8a8686' />
+            <Text style={styles.congratulationsText}>Congratulations! Your current hobby streak is</Text>
+            <Text style={styles.hobbyStreakText}>{hobbyStreak}</Text>
           </>
         )
         }
@@ -142,18 +177,39 @@ container: {
     marginTop: 0
 },
 calendarContainer: {
-  height: '70%'
+  flex: 8,
+  borderBottomWidth:1,
+  borderTopWidth: 1,
+  borderColor: '#8a8686'
+},
+actionContainer: {
+  flex: 2,
+  alignItems: 'center',
+  justifyContent: 'center',
 },
 button: {
-  paddingVertical: 8,
-  paddingHorizontal: 12,
-  marginVertical: 30,
+  paddingVertical: 2,
+  paddingHorizontal: 2,
+  //marginVertical: 20,
   borderRadius: 5,
-  backgroundColor: '#007BFF',
+  backgroundColor: '#cc0e2b',
+  flexDirection: 'row',
+  alignItems: 'center',
+  justifyContent: 'center'
 },
 buttonText: {
   color: '#fff',
-  fontSize: 16,
+  fontSize: 24,
+  marginHorizontal: 5,
+  fontFamily: 'agdasima-bold'
+},
+congratulationsText: {
+  fontFamily: 'agdasima-regular',
+  fontSize:20,
+},
+hobbyStreakText: {
+  fontFamily: 'agdasima-bold',
+  fontSize: 28,
 }
 });
 

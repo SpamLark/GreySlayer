@@ -112,6 +112,7 @@ const Recipes = ({route}) => {
       addForm={'Add Recipe'}
       parentId={modelId}
       item={'Recipe'}
+      statDisplay='none'
     />
   );
 

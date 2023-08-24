@@ -111,6 +111,7 @@ const Steps = ({route}) => {
       addForm={'Add Step'}
       parentId={recipeId}
       item={'Step'}
+      statDisplay='none'
     />
   );
 };

@@ -108,6 +108,7 @@ const Projects = () => {
       addForm={'Add Project'}
       //parentId={projectId}
       item={'Project'}
+      statDisplay='none'
     />
   );
 

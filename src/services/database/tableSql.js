@@ -1,6 +1,7 @@
 export const CREATE_CHECK_INS_SQL = `CREATE TABLE check_ins (
     check_in_id INTEGER PRIMARY KEY,
-    check_in_date TEXT NOT NULL UNIQUE
+    check_in_date TEXT NOT NULL UNIQUE,
+    photo_path TEXT
 )`;
   
 export const CREATE_STATUS_LOOKUP_SQL = `CREATE TABLE status_lookup (
