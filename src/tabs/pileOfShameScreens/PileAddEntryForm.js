@@ -4,6 +4,7 @@ import { useDatabase } from '../../services/database/DatabaseContext';
 import Slider from '@react-native-community/slider';
 import { insertNewPileOfShameEntry } from '../../services/pileOfShameServices';
 import { useNavigation } from '@react-navigation/native';
+import { Icon } from '@ui-kitten/components';
 
 
 const PileAddEntryForm = () => {
@@ -30,34 +31,49 @@ const PileAddEntryForm = () => {
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
-          <Text>Pile Entry Form</Text>
-          <Text>Model Kit Name</Text>
-          <TextInput
-            style={styles.input}
-            onChangeText={setKitName}
-            placeholder='Name of the kit'
-          />
-          <Text>Number of Models</Text>
-          <Text>{numModels}</Text>
-          <Slider
-            style={styles.slider}
-            value={numModels}
-            minimumValue={1}
-            maximumValue={30}
-            step={1}
-            onValueChange={(value) => setNumModels(value)}
-          />
-          <Text>Kit Value</Text>
-          <TextInput 
-            style={styles.input}
-            onChangeText={setKitValue}
-            keyboardType='numeric'
-          />
+          <Text style={styles.heading}>Pile Entry Form</Text>
+          <View style={styles.helpBox}>
+            <Icon style={styles.helpIcon} name="bulb-outline" height={20} width={20} fill='#271900' />
+            <Text style={styles.basicText}>Use this form to add an entry to your pile of shame.</Text>
+          </View>
+          <View style={styles.formContainer}>
+            <View style={styles.questionContainer}>
+              <Text style={styles.questionText}>Model Kit Name</Text>
+              <TextInput
+                style={styles.input}
+                onChangeText={setKitName}
+                placeholder='Name of the kit'
+              />
+            </View>
+            <View style={styles.questionContainer}>
+              <Text style={styles.questionText}>Number of Models:  {numModels}</Text>
+              <Text style={styles.questionText}></Text>
+              <Slider
+                style={styles.slider}
+                value={numModels}
+                minimumValue={1}
+                maximumValue={30}
+                step={1}
+                onValueChange={(value) => setNumModels(value)}
+                minimumTrackTintColor= '#bf0025'
+                maximumTrackTintColor= '#fffbff'
+              />
+            </View>
+            <View style={styles.questionContainer}>
+              <Text style={styles.questionText}>Kit Value</Text>
+              <TextInput 
+                style={styles.input}
+                onChangeText={setKitValue}
+                keyboardType='numeric'
+              />
+            </View>
+          </View>
           <TouchableOpacity 
             style={styles.button}
             onPress={()=> handleSubmit()}
           >
-            <Text style={styles.buttonText}>Submit</Text>
+            {/* <Text style={styles.buttonText}>Submit</Text> */}
+            <Icon name="save-outline" height={30} width={30} fill='#bf0025' />
           </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>
@@ -69,30 +85,86 @@ const PileAddEntryForm = () => {
       flex: 1,
       backgroundColor: '#fff',
       alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: 0
+      //justifyContent: 'center',
+      marginTop: 0,
+    },
+    heading:{
+      fontFamily: 'agdasima-bold',
+      fontSize: 32,
+      marginTop: 20,
+      color: '#201a1a'
+    },
+    helpBox: {
+      flex: 1,
+      flexDirection:'row',
+      backgroundColor: '#ffdeaa',
+      justifyContent:'center',
+      alignItems: 'center',
+      paddingHorizontal: 20,
+      marginHorizontal: 50,
+      // marginVertical: 20,
+      borderRadius: 10,
+      width: 300,
+      marginTop: 20
+      // height: 50
+    },
+    helpIcon: {
+      marginHorizontal:10
+    },
+    basicText: {
+      paddingHorizontal:15,
+      fontFamily: 'agdasima-regular',
+      fontSize: 18
+    },
+    formContainer: {
+      flex: 5,
+      backgroundColor: '#ffdad8',
+      justifyContent:'space-evenly',
+      alignItems: 'center',
+      width: 300,
+      borderRadius: 10,
+      paddingHorizontal: 10,
+      marginTop: 20,
+    },
+    questionContainer: {
+      flex: 1,
+      alignItems:'flex-start',
+      width: '100%',
+      justifyContent: 'space-evenly',
+      paddingVertical: 10,
+      paddingHorizontal: 5
+    },
+    questionText: {
+      fontFamily: 'agdasima-regular',
+      fontSize: 24,
+      color: '#410006'
     },
     input: {
       height: 40,
-      margin: 12,
-      borderWidth: 1,
-      padding: 10,
-      width: 200
+      margin: 0,
+      //borderWidth: 1,
+      paddingHorizontal: 10,
+      width: '100%',
+      backgroundColor: '#fffbff',
+      borderRadius: 10,
+      fontFamily: 'agdasima-regular',
+      fontSize: 18
     },
     button: {
       paddingVertical: 8,
       paddingHorizontal: 12,
-      marginVertical: 30,
+      marginTop: 10,
+      marginBottom: 20,
       borderRadius: 5,
-      backgroundColor: '#007BFF',
+      backgroundColor: '#ffffff',
     },
     buttonText: {
       color: '#fff',
       fontSize: 16,
     },
     slider: {
-      width: 200,
       height: 40,
+      width: '100%'
     }
   });
 

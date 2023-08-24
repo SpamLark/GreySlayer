@@ -22,18 +22,19 @@ return (
             />
         </GestureHandlerRootView>
       </View>
-      <View style={styles.buttonContainer}>
+      <View style={styles.actionContainer}>
         <TouchableOpacity 
           style={styles.button}
           onPress={()=> navigation.navigate(addForm, parentId)}
         >
-          <Text style={styles.buttonText}>ADD {item}</Text>
+          {/* <Text style={styles.buttonText}>ADD {item}</Text> */}
+          <Icon name="plus-outline" height={50} width={50} fill='#fff' />
         </TouchableOpacity>
           <TouchableOpacity 
-            style={[styles.statsButton, {display: statDisplay}]}
+            style={[styles.button, {display: statDisplay}]}
             onPress={()=> navigation.navigate('View Statistics')}
           >
-            <Icon name="bar-chart-outline" height={30} width={30} fill='#fff' />
+            <Icon name="bar-chart-outline" height={50} width={50} fill='#fff' />
           </TouchableOpacity>
       </View>
     </View>
@@ -60,14 +61,6 @@ const styles = StyleSheet.create({
       padding: 10,
       borderWidth: 1
     },
-    buttonContainer: {
-      flex: 2,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: 0,
-      flexDirection: 'row'
-    },
     flashlistContainer: {
       flex: 8,
       backgroundColor: '#fff',
@@ -75,15 +68,23 @@ const styles = StyleSheet.create({
       borderTopWidth: 1,
       borderColor: '#8a8686'
     },
+    actionContainer: {
+      flex: 2,
+      alignItems: 'center',
+      justifyContent: 'space-evenly',
+      flexDirection: 'row',
+    },
     button: {
-      paddingVertical: 8,
-      paddingHorizontal: 12,
+      paddingVertical: 2,
+      paddingHorizontal: 2,
       //marginVertical: 20,
-      borderRadius: 5,
+      borderRadius: 10,
       backgroundColor: '#cc0e2b',
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'center'
+      justifyContent: 'center',
+      height: 70,
+      width: 70
     },
     statsButton: {
       paddingVertical: 2,

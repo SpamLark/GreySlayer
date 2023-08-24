@@ -3,7 +3,7 @@ const getAllCheckIns = async (db) => {
     return new Promise((resolve, reject) => {
         db.transaction((tx) => {
             tx.executeSql(
-                'SELECT check_in_id, check_in_date FROM check_ins;',
+                'SELECT check_in_id, check_in_date, photo_path FROM check_ins;',
                 [],
                 (_, { rows }) => {
                 const items = rows._array;
@@ -53,7 +53,6 @@ const getCurrentHobbyStreak = async (db) => {
                 [todaysDate()],
                 (_, { rows }) => {
                 const items = rows._array;
-                console.log(items);
                 resolve(items);
                 },
                 (_, error) => {
@@ -118,6 +117,27 @@ const insertCheckIn = async (db, checkInDate) => {
     })
 }
 
+// Add image URI to check_in
+const insertImageUri = async (db, fileUri, photoDate) => {
+    console.log('URI: ', fileUri, 'Date: ', photoDate);
+    // Attempt to insert into database
+    return new Promise((resolve, reject) => {
+        db.transaction((tx) => {
+            tx.executeSql(
+                'UPDATE check_ins SET photo_path = ? WHERE check_in_id = (SELECT check_in_id FROM check_ins WHERE check_in_date = ?);',
+                [fileUri, photoDate],
+                (_, result) => {
+                    resolve(result);
+                },
+                (_, error) => {
+                    console.log('Error adding photo path:', error);
+                    reject(error);
+                }
+            );
+        });
+    })
+}
+
 // Delete check_in
 const deleteCheckIn = async (db, checkInDate) => {
     // Throw error if date is invalid
@@ -144,4 +164,4 @@ const deleteCheckIn = async (db, checkInDate) => {
 }
 
 
-export { getAllCheckIns, insertCheckIn, todaysDate, deleteCheckIn, getCurrentHobbyStreak };
+export { getAllCheckIns, insertCheckIn, todaysDate, deleteCheckIn, getCurrentHobbyStreak, insertImageUri };

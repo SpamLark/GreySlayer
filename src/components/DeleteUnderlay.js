@@ -22,11 +22,11 @@ horizontalListContainer: {
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginVertical: 2,
-    marginHorizontal: 2,
+    marginVertical: 5,
+    marginHorizontal: 10,
     height: 50,
     padding: 10,
-    borderWidth: 1
+    borderRadius: 10
 },
 underlayLeft: {
     flex: 1,

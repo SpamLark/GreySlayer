@@ -113,7 +113,6 @@ const PileOverview = () => {
           addForm={'Add Entry'}
           //parentId={projectId}
           item={'ENTRY'}
-          
         />
       </View>
     </View>
@@ -135,19 +134,21 @@ const styles = StyleSheet.create({
   horizontalListContainer: {
     flexDirection: 'row',
     flex: 1,
-    backgroundColor: '#636363',
+    backgroundColor: '#ffdad8',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginVertical: 2,
-    marginHorizontal: 2,
+    marginVertical: 5,
+    marginHorizontal: 10,
     height: 50,
     padding: 10,
-    borderWidth: 1,
+    borderRadius: 10
+    //borderWidth: 1,
+    //borderColor: 
   },
   listItem: {
     fontFamily: 'agdasima-regular',
     fontSize: 22,
-    color: '#fff'
+    color: '#410006'
   },
   buttonContainer: {
     flex: 1,

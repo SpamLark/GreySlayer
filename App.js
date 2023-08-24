@@ -41,6 +41,7 @@ export default function App() {
     return (<Text>Loading</Text>)
   }
 
+  
   return (
     <>
     <IconRegistry icons={EvaIconsPack} />
@@ -48,7 +49,8 @@ export default function App() {
       <NavigationContainer styles={styles.container}>
         <Tab.Navigator
           screenOptions={{
-            tabBarActiveTintColor: '#cc0e2b',
+            tabBarActiveTintColor: '#bf0025',
+            tabBarInactiveTintColor: '#534342',
             tabBarLabelStyle: {
               //fontFamily: 'odachi',
               //fontSize: 18
@@ -60,8 +62,11 @@ export default function App() {
               color: '#fff'
             },
             headerStyle: {
-              backgroundColor: '#cc0e2b'
-            } 
+              backgroundColor: '#bf0025'
+            },
+            tabBarStyle: {
+              backgroundColor: '#f4dddc'
+            }
           }}
         >
           <Tab.Screen 
@@ -80,9 +85,6 @@ export default function App() {
               tabBarIcon: ({ color, size }) => (
                 <Icon name="archive-outline" fill={color} style={{width: size, height: size}} />
               ),
-            headerStyle: {
-              backgroundColor: '#636363'
-            }
             }}
           />         
           <Tab.Screen 
@@ -96,7 +98,7 @@ export default function App() {
           />
         </Tab.Navigator>
       </NavigationContainer>
-      <StatusBar style="auto" />
+      {/* <StatusBar style="auto" /> */}
     </DatabaseProvider>
     </>
   );
