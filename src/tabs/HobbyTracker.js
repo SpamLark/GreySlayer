@@ -84,8 +84,17 @@ const Tracker = () => {
     const datePressed = (date.dateString);
     const foundCheckIn = checkIns.find(checkIn => checkIn.check_in_date === datePressed);
     if(foundCheckIn && foundCheckIn.photo_path) {
-      setViewImagePath(foundCheckIn.photo_path);
+      console.log(foundCheckIn.photo_path);
+      setViewImagePath(foundCheckIn.photo_path)
       setModalVisible(true);
+      const directoryPath = FileSystem.documentDirectory;
+    
+      FileSystem.readDirectoryAsync(directoryPath)
+        .then(contents => {
+          console.log('Contents of the directory:', contents);
+        })
+        .catch(error => {
+          console.error('Error reading directory:', error);})
     }
     else if (foundCheckIn) {
       pickImage(datePressed);
@@ -227,7 +236,7 @@ const Tracker = () => {
                   })
                 }
             >
-              <Icon name="checkmark-outline" fill='white' height={50} width={50}/>
+              <Icon name="checkmark-square-2-outline" fill='#bf0025' height={50} width={50}/>
             </TouchableOpacity>
         ) : (
           <>
@@ -293,7 +302,7 @@ button: {
   paddingHorizontal: 2,
   //marginVertical: 20,
   borderRadius: 10,
-  backgroundColor: '#cc0e2b',
+  backgroundColor: '#fff',
   flexDirection: 'row',
   alignItems: 'center',
   justifyContent: 'center',

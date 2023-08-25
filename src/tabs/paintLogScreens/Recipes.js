@@ -46,7 +46,7 @@ const Recipes = ({route}) => {
           >
             <View style={styles.horizontalListContainer}>
               <View>
-                <Text>{item.recipe_name}</Text>
+                <Text style={styles.listItem}>{item.recipe_name}</Text>
               </View>
             </View>
           </TouchableOpacity>
@@ -121,46 +121,55 @@ const Recipes = ({route}) => {
 // STYLE
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: '#fff',
-      //alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: 0
-    },
-    horizontalListContainer: {
-      flexDirection: 'row',
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      marginVertical: 2,
-      marginHorizontal: 2,
-      height: 50,
-      padding: 10,
-      borderWidth: 1
-    },
-    buttonContainer: {
-      flex: 1,
-      backgroundColor: '#fff',
-      alignItems: 'center',
-      justifyContent: 'center',
-      marginTop: 0
-    },
-    flashlistContainer: {
-      height: '70%'
-    },
-    button: {
-      paddingVertical: 8,
-      paddingHorizontal: 12,
-      marginVertical: 30,
-      borderRadius: 5,
-      backgroundColor: '#007BFF',
-    },
-    buttonText: {
-      color: '#fff',
-      fontSize: 16,
-    }
-  });
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    //alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 0
+  },
+  listContainer: {
+    flex: 9,
+  },
+  horizontalListContainer: {
+    flexDirection: 'row',
+    flex: 1,
+    backgroundColor: '#ffdad8',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginVertical: 5,
+    marginHorizontal: 10,
+    height: 50,
+    padding: 10,
+    borderRadius: 10
+    //borderWidth: 1,
+    //borderColor: 
+  },
+  listItem: {
+    fontFamily: 'agdasima-regular',
+    fontSize: 22,
+    color: '#410006'
+  },
+  buttonContainer: {
+    flex: 1,
+    backgroundColor: '#fff',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+    marginTop: 0
+  },
+  button: {
+    paddingVertical: 2,
+    paddingHorizontal: 2,
+    marginVertical: 5,
+    marginRight: 5,
+    borderRadius: 5,
+    backgroundColor: '#cc0e2b',
+  },
+  buttonText: {
+    color: '#fff',
+    fontSize: 16,
+  }
+});
 
 export default Recipes;

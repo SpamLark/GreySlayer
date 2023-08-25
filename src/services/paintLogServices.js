@@ -99,7 +99,7 @@ const insertNewProject = async (db, projectName, modelRange) => {
         db.transaction((tx) => {
             tx.executeSql(
                 `INSERT INTO projects (project_name, model_range, project_number)
-                    VALUES (?, ?, (SELECT MAX(project_number) + 1 FROM projects));`,
+                    VALUES (?, ?, (SELECT COALESCE(MAX(project_number), 0) + 1 FROM projects));`,
                 [projectName, modelRange],
                 (_, result) => {
                     console.log('Row inserted to projects successfully.');
@@ -192,7 +192,7 @@ const insertNewModel = async (db, modelName, projectId) => {
         db.transaction((tx) => {
             tx.executeSql(
                 `INSERT INTO models (model_name, project_id, model_number)
-                    VALUES (?, ?, (SELECT MAX(m2.model_number) + 1 FROM models m2 WHERE project_id = m2.project_id));`,
+                    VALUES (?, ?, (SELECT COALESCE(MAX(m2.model_number), 0) + 1 FROM models m2 WHERE project_id = m2.project_id));`,
                 [modelName, projectId],
                 (_, result) => {
                     console.log('Row inserted to models successfully.');
@@ -276,7 +276,7 @@ const insertNewRecipe = async (db, recipeName, modelId) => {
         db.transaction((tx) => {
             tx.executeSql(
                 `INSERT INTO recipes (recipe_name, model_id, recipe_number)
-                    VALUES (?, ?, (SELECT MAX(r2.recipe_number) + 1 FROM recipes r2 WHERE model_id = r2.model_id));`,
+                    VALUES (?, ?, (SELECT COALESCE(MAX(r2.recipe_number), 0) + 1 FROM recipes r2 WHERE model_id = r2.model_id));`,
                 [recipeName, modelId],
                 (_, result) => {
                     console.log('Row inserted to recipes successfully.');
@@ -345,7 +345,7 @@ const insertNewStep = async (db, stepDescription, paintName, paintBrand, recipeI
         db.transaction((tx) => {
             tx.executeSql(
                 `INSERT INTO steps (step_description, paint_name, paint_brand, recipe_id, step_number)
-                VALUES (?, ?, ?, ?, (SELECT MAX(s2.step_number) + 1 FROM steps s2 WHERE recipe_id = s2.recipe_id));`,
+                VALUES (?, ?, ?, ?, (SELECT COALESCE(MAX(s2.step_number), 0) + 1 FROM steps s2 WHERE recipe_id = s2.recipe_id));`,
                 [stepDescription, paintName, paintBrand, recipeId],
                 (_, result) => {
                     console.log('Row inserted to steps successfully.');

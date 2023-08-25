@@ -70,7 +70,7 @@ const dropTables = async (db) => {
 }
 
 const createTables = async (db) => {
-  // await dropTables(db);
+  //await dropTables(db);
   await createTable(db, 'check_ins', SQL.CREATE_CHECK_INS_SQL);
   await createTable(db, 'status_lookup', SQL.CREATE_STATUS_LOOKUP_SQL);
   await createTable(db, 'model_kits', SQL.CREATE_MODEL_KITS_SQL);
@@ -78,7 +78,7 @@ const createTables = async (db) => {
   await createTable(db, 'models', SQL.CREATE_MODELS_SQL);
   await createTable(db, 'recipes', SQL.CREATE_RECIPES_SQL);
   await createTable(db, 'steps', SQL.CREATE_STEPS_SQL);
-  // await insertData(db);
+  await insertData(db);
 };
 
 export default createTables;

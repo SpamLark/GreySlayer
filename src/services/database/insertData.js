@@ -1,15 +1,15 @@
 // Insert dummy check-in data
 const insertCheckInData = async (db) => {
     db.transaction(tx => {
-        tx.executeSql(`INSERT INTO check_ins (check_in_date) VALUES ('2023-08-23');`);
-        tx.executeSql(`INSERT INTO check_ins (check_in_date) VALUES ('2023-08-22');`);
-        tx.executeSql(`INSERT INTO check_ins (check_in_date) VALUES ('2023-08-21');`);
-        tx.executeSql(`INSERT INTO check_ins (check_in_date) VALUES ('2023-08-12');`);
-        tx.executeSql(`INSERT INTO check_ins (check_in_date) VALUES ('2023-08-31');`);
-        tx.executeSql(`INSERT INTO check_ins (check_in_date) VALUES ('2023-09-01');`);
-        tx.executeSql(`INSERT INTO check_ins (check_in_date) VALUES ('2023-09-05');`);
-        tx.executeSql(`INSERT INTO check_ins (check_in_date) VALUES ('2023-09-12');`);
-        tx.executeSql(`INSERT INTO check_ins (check_in_date) VALUES ('2023-09-30');`);
+        tx.executeSql(`INSERT OR IGNORE INTO check_ins (check_in_date) VALUES ('2023-08-23');`);
+        tx.executeSql(`INSERT OR IGNORE INTO check_ins (check_in_date) VALUES ('2023-08-22');`);
+        tx.executeSql(`INSERT OR IGNORE INTO check_ins (check_in_date) VALUES ('2023-08-21');`);
+        tx.executeSql(`INSERT OR IGNORE INTO check_ins (check_in_date) VALUES ('2023-08-12');`);
+        tx.executeSql(`INSERT OR IGNORE INTO check_ins (check_in_date) VALUES ('2023-08-31');`);
+        tx.executeSql(`INSERT OR IGNORE INTO check_ins (check_in_date) VALUES ('2023-09-01');`);
+        tx.executeSql(`INSERT OR IGNORE INTO check_ins (check_in_date) VALUES ('2023-09-05');`);
+        tx.executeSql(`INSERT OR IGNORE INTO check_ins (check_in_date) VALUES ('2023-09-12');`);
+        tx.executeSql(`INSERT OR IGNORE INTO check_ins (check_in_date) VALUES ('2023-09-30');`);
     }, error => {
         console.log('error inserting check_in data:', error);
     }, () => {
@@ -20,9 +20,9 @@ const insertCheckInData = async (db) => {
 // Insert dummy status_lookup data
 const insertStatusLookupData = async (db) => {
     db.transaction(tx => {
-        tx.executeSql(`INSERT INTO status_lookup (status_id, status_description) VALUES (1, 'Pile of Shame');`);
-        tx.executeSql(`INSERT INTO status_lookup (status_id, status_description) VALUES (2, 'Completed');`);
-        tx.executeSql(`INSERT INTO status_lookup (status_id, status_description) VALUES (3, 'Sold');`);
+        tx.executeSql(`INSERT OR IGNORE INTO status_lookup (status_id, status_description) VALUES (1, 'Pile of Shame');`);
+        tx.executeSql(`INSERT OR IGNORE INTO status_lookup (status_id, status_description) VALUES (2, 'Completed');`);
+        tx.executeSql(`INSERT OR IGNORE INTO status_lookup (status_id, status_description) VALUES (3, 'Sold');`);
     }, error => {
         console.log('error inserting status_lookup data:', error);
     }, () => {
@@ -112,11 +112,11 @@ const insertStepsData = async (db) => {
 const insertData = async (db) => {
     await insertCheckInData(db);
     await insertStatusLookupData(db);
-    await insertModelKitData(db);
-    await insertProjectData(db);
-    await insertModelsData(db);
-    await insertRecipesData(db);
-    await insertStepsData(db);
+    // await insertModelKitData(db);
+    // await insertProjectData(db);
+    // await insertModelsData(db);
+    // await insertRecipesData(db);
+    // await insertStepsData(db);
 }
 
 export default insertData;

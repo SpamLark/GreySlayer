@@ -6,7 +6,7 @@ export const CREATE_CHECK_INS_SQL = `CREATE TABLE check_ins (
   
 export const CREATE_STATUS_LOOKUP_SQL = `CREATE TABLE status_lookup (
 status_id INTEGER PRIMARY KEY,
-status_description TEXT NOT NULL
+status_description TEXT UNNIQUE NOT NULL
 );`
   
 export const CREATE_MODEL_KITS_SQL = `CREATE TABLE model_kits (

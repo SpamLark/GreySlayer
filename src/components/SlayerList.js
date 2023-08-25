@@ -28,13 +28,13 @@ return (
           onPress={()=> navigation.navigate(addForm, parentId)}
         >
           {/* <Text style={styles.buttonText}>ADD {item}</Text> */}
-          <Icon name="plus-outline" height={50} width={50} fill='#fff' />
+          <Icon name="plus-square-outline" height={50} width={50} fill='#bf0025' />
         </TouchableOpacity>
           <TouchableOpacity 
             style={[styles.button, {display: statDisplay}]}
             onPress={()=> navigation.navigate('View Statistics')}
           >
-            <Icon name="bar-chart-outline" height={50} width={50} fill='#fff' />
+            <Icon name="trending-up-outline" height={50} width={50} fill='#bf0025' />
           </TouchableOpacity>
       </View>
     </View>
@@ -49,24 +49,13 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       marginTop: 0
     },
-    horizontalListContainer: {
-      flexDirection: 'row',
-      flex: 1,
-      backgroundColor: '#cc0e2b',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      marginVertical: 2,
-      marginHorizontal: 2,
-      height: 50,
-      padding: 10,
-      borderWidth: 1
-    },
     flashlistContainer: {
       flex: 8,
       backgroundColor: '#fff',
-      borderBottomWidth:1,
-      borderTopWidth: 1,
-      borderColor: '#8a8686'
+      // borderBottomWidth:1,
+      // borderTopWidth: 1,
+      borderColor: '#8a8686',
+      paddingTop: 10
     },
     actionContainer: {
       flex: 2,
@@ -79,7 +68,7 @@ const styles = StyleSheet.create({
       paddingHorizontal: 2,
       //marginVertical: 20,
       borderRadius: 10,
-      backgroundColor: '#cc0e2b',
+      backgroundColor: '#fff',
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center',
@@ -91,7 +80,7 @@ const styles = StyleSheet.create({
       paddingHorizontal: 2,
       //marginVertical: 20,
       borderRadius: 5,
-      backgroundColor: '#cc0e2b',
+      backgroundColor: '#fff',
       flexDirection: 'row',
       alignItems: 'center',
       justifyContent: 'center'

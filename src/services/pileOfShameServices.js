@@ -130,7 +130,7 @@ const insertNewPileOfShameEntry = async (db, kitName, numModels, kitValue) => {
         db.transaction((tx) => {
             tx.executeSql(
                 `INSERT INTO model_kits (kit_name, num_models, kit_value, status_id, kit_number)
-                    VALUES (?, ?, ?, 1, (SELECT MAX(kit_number) + 1 FROM model_kits));`,
+                    VALUES (?, ?, ?, 1, (SELECT COALESCE(MAX(kit_number), 0) + 1 FROM model_kits));`,
                 [kitName, numModels, kitValue],
                 (_, result) => {
                     console.log('Row inserted to model_kits successfully.');
@@ -143,7 +143,7 @@ const insertNewPileOfShameEntry = async (db, kitName, numModels, kitValue) => {
             )
         })
     })
-}
+};
 
 /* 
 Update the status for pile of shame entry 

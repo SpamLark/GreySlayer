@@ -20,17 +20,41 @@ const PileOfShame = () => {
       <Stack.Screen
         name="Add Entry"
         component={PileAddEntryForm}
-        options={{title:'Add Pile Entry', headerTintColor: '#cc0e2b'}}
+        options={{
+          title:'Add Entry', 
+          headerTintColor: '#cc0e2b', 
+          headerBackTitleVisible: false, 
+          headerTitleStyle: {
+            fontFamily: 'agdasima-bold',
+            fontSize: 20
+          }
+        }}
       />
       <Stack.Screen
         name="View Entry"
         component={PileViewEntry}
-        options={{title:'View Pile Entry', headerTintColor: '#cc0e2b'}}
+        options={{
+          title:'View Entry', 
+          headerTintColor: '#cc0e2b', 
+          headerBackTitleVisible: false,
+          headerTitleStyle: {
+            fontFamily: 'agdasima-bold',
+            fontSize: 20
+          }
+        }}
       />
       <Stack.Screen
         name="View Statistics"
         component={PileStatistics}
-        options={{title:'View Pile Statistics', headerTintColor: '#cc0e2b'}}
+        options={{
+          title:'Stats', 
+          headerTintColor: '#cc0e2b', 
+          headerBackTitleVisible: false,
+          headerTitleStyle: {
+            fontFamily: 'agdasima-bold',
+            fontSize: 20
+          }
+        }}
       />
     </Stack.Navigator>
   );

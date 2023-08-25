@@ -17,42 +17,106 @@ const PaintLog = () => {
       <Stack.Screen 
         name="Projects"
         component={Projects}
-        options={{title:'Projects'}}
+        options={{
+          title:'Projects',
+          headerTintColor: '#cc0e2b', 
+          headerBackTitleVisible: false,
+          headerTitleStyle: {
+            fontFamily: 'agdasima-bold',
+            fontSize: 20
+          }
+        }}
       />
       <Stack.Screen
         name="Add Project"
         component={ProjectAddEntryForm}
-        options={{title:'Add New Project'}}
+        options={{
+          title:'Add New Project',
+          headerTintColor: '#cc0e2b', 
+          headerBackTitleVisible: false,
+          headerTitleStyle: {
+            fontFamily: 'agdasima-bold',
+            fontSize: 20
+          }
+        }}
       />
       <Stack.Screen
         name="Models"
         component={Models}
-        options={{title:'Models'}}
+        options={{
+          title:'Models',
+          headerTintColor: '#cc0e2b', 
+          headerBackTitleVisible: false,
+          headerTitleStyle: {
+            fontFamily: 'agdasima-bold',
+            fontSize: 20
+          }
+        }}
       />
       <Stack.Screen
         name="Add Model"
         component={ModelAddEntryForm}
-        options={{title:'Add New Model'}}
+        options={{
+          title:'Add New Model',
+          headerTintColor: '#cc0e2b', 
+          headerBackTitleVisible: false,
+          headerTitleStyle: {
+            fontFamily: 'agdasima-bold',
+            fontSize: 20
+          }
+        }}
       />
       <Stack.Screen
         name="Recipes"
         component={Recipes}
-        options={{title:'Recipes'}}
+        options={{
+          title:'Recipes',
+          headerTintColor: '#cc0e2b', 
+          headerBackTitleVisible: false,
+          headerTitleStyle: {
+            fontFamily: 'agdasima-bold',
+            fontSize: 20
+          }
+        }}
       />
       <Stack.Screen
         name="Add Recipe"
         component={RecipeAddEntryForm}
-        options={{title:'Add New Recipe'}}
+        options={{
+          title:'Add New Recipe',
+          headerTintColor: '#cc0e2b', 
+          headerBackTitleVisible: false,
+          headerTitleStyle: {
+            fontFamily: 'agdasima-bold',
+            fontSize: 20
+          }
+        }}
       />
       <Stack.Screen
         name="Steps"
         component={Steps}
-        options={{title:'Steps'}}
+        options={{
+          title:'Steps',
+          headerTintColor: '#cc0e2b', 
+          headerBackTitleVisible: false,
+          headerTitleStyle: {
+            fontFamily: 'agdasima-bold',
+            fontSize: 20
+          }
+        }}
       />
       <Stack.Screen
         name="Add Step"
         component={StepAddEntryForm}
-        options={{title:'Add New Step'}}
+        options={{
+          title:'Add New Step',
+          headerTintColor: '#cc0e2b', 
+          headerBackTitleVisible: false,
+          headerTitleStyle: {
+            fontFamily: 'agdasima-bold',
+            fontSize: 20
+          }
+        }}
       />
     </Stack.Navigator>
   );

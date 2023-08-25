@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { getTotalPileValue, getTotalPileSoldValue, getTotalPileModels, getTotalCompletedPileModels } from '../../services/pileOfShameServices';
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 import { useDatabase } from '../../services/database/DatabaseContext';
+import { Icon } from '@ui-kitten/components';
 
 const PileStatistics = () => {
 
@@ -68,14 +69,34 @@ const PileStatistics = () => {
 
     return (
         <View style={styles.container}>
-            <Text>Current Pile value:</Text>
-            <Text style={styles.bigText}>£{pileValue.toFixed(2)}</Text>
-            <Text>Models in your Pile:</Text>
-            <Text style={styles.bigText}>{pileModels}</Text> 
-            <Text>Pile models completed:</Text>
-            <Text style={styles.bigText}>{totalCompleted}</Text>
-            <Text>Value of kits sold:</Text>
-            <Text style={styles.bigText}>£{totalSold.toFixed(2)}</Text>
+            <View style={styles.statContainer}>
+            <Icon style={styles.helpIcon} name="percent-outline" height={50} width={50} fill="#271900" />
+                <View style={styles.textContainer}>
+                    <Text style={styles.labelText}>Current Pile value:</Text>
+                    <Text style={styles.bigText}>£{pileValue.toFixed(2)}</Text>
+                </View>
+            </View>
+            <View style={styles.statContainer}>
+                <View style={[styles.textContainer, {alignItems:'flex-start'}]}>
+                    <Text style={styles.labelText}>Models in your Pile:</Text>
+                    <Text style={styles.bigText}>{pileModels}</Text>
+                </View>
+                <Icon style={styles.helpIcon} name="cube-outline" height={50} width={50} fill="#271900" />
+            </View>
+            <View style={styles.statContainer}>
+                <Icon style={styles.helpIcon} name="color-palette-outline" height={50} width={50} fill="#271900" />
+                <View style={styles.textContainer}>
+                    <Text style={styles.labelText}>Pile models completed:</Text>
+                    <Text style={styles.bigText}>{totalCompleted}</Text>
+                </View>
+            </View>
+            <View style={styles.statContainer}>
+                <View style={[styles.textContainer, {alignItems:'flex-start'}]}>
+                    <Text style={styles.labelText}>Value of kits sold:</Text>
+                    <Text style={styles.bigText}>£{totalSold.toFixed(2)}</Text>
+                </View>
+                <Icon style={styles.helpIcon} name="shopping-cart-outline" height={50} width={50} fill="#271900" />
+            </View>
         </View>
     );
 };
@@ -86,12 +107,36 @@ const styles = StyleSheet.create({
       flex: 1,
       backgroundColor: '#fff',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'space-evenly',
+      paddingHorizontal: 20,
       marginTop: 0
     },
+    statContainer: {
+        //flex: 1,
+        alignItems:'center',
+        width: '100%',
+        justifyContent: 'space-evenly',
+        alignContent: 'center',
+        paddingVertical: 10,
+        paddingHorizontal: 10,
+        backgroundColor: '#ffdeaa',
+        borderRadius: 10,
+        flexDirection: 'row',
+    },
+    textContainer: {
+        flexDirection: 'column',
+        alignItems: 'flex-end',
+        padding: 5
+    },
+    helpIcon: {
+    },
     bigText: {
-        fontWeight: 'bold',
-        fontSize: 30,
+        fontSize: 50,
+        fontFamily: 'agdasima-bold',
+    },
+    labelText: {
+        fontFamily: 'agdasima-regular',
+        fontSize: 30
     },
     horizontalListContainer: {
       flexDirection: 'row',

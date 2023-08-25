@@ -31,7 +31,6 @@ const PileAddEntryForm = () => {
     return (
       <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
         <View style={styles.container}>
-          <Text style={styles.heading}>Pile Entry Form</Text>
           <View style={styles.helpBox}>
             <Icon style={styles.helpIcon} name="bulb-outline" height={20} width={20} fill='#271900' />
             <Text style={styles.basicText}>Use this form to add an entry to your pile of shame.</Text>
@@ -72,8 +71,7 @@ const PileAddEntryForm = () => {
             style={styles.button}
             onPress={()=> handleSubmit()}
           >
-            {/* <Text style={styles.buttonText}>Submit</Text> */}
-            <Icon name="save-outline" height={30} width={30} fill='#bf0025' />
+            <Icon name="save-outline" height={50} width={50} fill='#bf0025' />
           </TouchableOpacity>
         </View>
       </TouchableWithoutFeedback>
