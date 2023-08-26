@@ -106,13 +106,13 @@ const insertStepsData = async (db) => {
 
 
 const insertData = async (db) => {
-    await insertCheckInData(db);
     await insertStatusLookupData(db);
-    await insertModelKitData(db);
-    await insertProjectData(db);
-    await insertModelsData(db);
-    await insertRecipesData(db);
-    await insertStepsData(db);
+    // await insertCheckInData(db);
+    // await insertModelKitData(db);
+    // await insertProjectData(db);
+    // await insertModelsData(db);
+    // await insertRecipesData(db);
+    // await insertStepsData(db);
 }
 
 export default insertData;

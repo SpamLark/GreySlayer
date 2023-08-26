@@ -87,14 +87,6 @@ const Tracker = () => {
       console.log(foundCheckIn.photo_path);
       setViewImagePath(foundCheckIn.photo_path)
       setModalVisible(true);
-      const directoryPath = FileSystem.documentDirectory;
-    
-      FileSystem.readDirectoryAsync(directoryPath)
-        .then(contents => {
-          console.log('Contents of the directory:', contents);
-        })
-        .catch(error => {
-          console.error('Error reading directory:', error);})
     }
     else if (foundCheckIn) {
       pickImage(datePressed);
@@ -155,7 +147,7 @@ const Tracker = () => {
     }
   };
 
-  // Retrieve checkIns and hobby streak from database on focus
+  // Retrieve checkIns on focus
   useEffect(() => {
     if (isFocused) {
       (async () => {
